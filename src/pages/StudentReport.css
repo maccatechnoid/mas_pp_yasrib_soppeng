@@ -1,14 +1,155 @@
-.report-portal-container {
-  min-height: 80vh;
-  padding: 1rem;
+/* Kemenag RDM Styles */
+.kemenag-brand {
+  margin-bottom: 2rem;
 }
 
-/* Search View */
-.search-view {
+.kemenag-logo {
+  width: 70px;
+  margin-bottom: 1rem;
+}
+
+.kemenag-brand h3 {
+  font-size: 1.2rem;
+  color: #064e3b;
+  margin: 0;
+}
+
+.kemenag-brand p {
+  font-size: 0.85rem;
+  color: #64748b;
+}
+
+.kemenag-style {
+  font-family: 'Arial', sans-serif;
+  color: #000;
+  padding: 2.5rem !important;
+}
+
+.kemenag-kop {
   display: flex;
-  justify-content: center;
   align-items: center;
-  padding-top: 4rem;
+  justify-content: space-between;
+  border-bottom: 3px solid #000;
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+}
+
+.kop-logo-kemenag img {
+  width: 75px;
+}
+
+.kop-logo-madrasah img {
+  width: 75px;
+  max-height: 75px;
+  object-fit: contain;
+}
+
+.kop-text {
+  text-align: center;
+  flex: 1;
+}
+
+.kop-text h3 { font-size: 1.1rem; margin: 0; }
+.kop-text h4 { font-size: 0.95rem; margin: 0; }
+.kop-text h2.madrasah-name { font-size: 1.4rem; margin: 5px 0; font-weight: 900; }
+.kop-text p.madrasah-address { font-size: 0.8rem; margin: 0; }
+
+.report-title-section {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.report-title-section h2 {
+  font-size: 1.2rem;
+  text-decoration: underline;
+  margin-bottom: 5px;
+}
+
+.student-info-table {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 25px;
+  font-size: 0.95rem;
+}
+
+.rdm-section {
+  margin-bottom: 25px;
+}
+
+.rdm-section h3 {
+  font-size: 1rem;
+  margin-bottom: 10px;
+  font-weight: 800;
+}
+
+.rdm-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.rdm-table th, .rdm-table td {
+  border: 1px solid #000;
+  padding: 6px 10px;
+}
+
+.rdm-table th {
+  background: #f1f5f9;
+}
+
+.group-title {
+  background: #f8fafc;
+  font-weight: 700;
+  font-style: italic;
+  padding: 5px 10px !important;
+}
+
+.desc-cell {
+  font-size: 0.8rem;
+  line-height: 1.4;
+  text-align: justify;
+}
+
+.rdm-grid-2 {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 20px;
+}
+
+.rdm-notes-box {
+  border: 1px solid #000;
+  padding: 15px;
+  min-height: 80px;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.rdm-signatures {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin-top: 30px;
+  gap: 20px;
+}
+
+.sig-center {
+  grid-column: span 2;
+  text-align: center;
+  margin-top: 20px;
+}
+
+.sig-space-large {
+  height: 100px;
+  margin: 10px 0;
+  position: relative;
+}
+
+.rdm-stempel {
+  height: 90px;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0.7;
 }
 
 .search-box-card {

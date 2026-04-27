@@ -2,9 +2,59 @@
   animation: fadeIn 0.5s ease;
 }
 
+.mode-toggle-bar {
+  display: flex;
+  gap: 10px;
+  padding: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.mode-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 1rem;
+  border-radius: 12px;
+  border: none;
+  background: transparent;
+  color: #64748b;
+  font-weight: 700;
+  transition: all 0.3s;
+  cursor: pointer;
+}
+
+.mode-btn.active {
+  background: white;
+  color: var(--primary);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+.mode-btn:hover:not(.active) {
+  background: rgba(255,255,255,0.5);
+}
+
 .grades-filter-card {
   margin-bottom: 2rem;
   padding: 1.5rem;
+}
+
+.notes-textarea {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  color: #1e293b;
+  transition: all 0.2s;
+  resize: vertical;
+}
+
+.notes-textarea:focus {
+  border-color: var(--primary);
+  outline: none;
+  background: #f0fdf4;
 }
 
 .filter-grid {

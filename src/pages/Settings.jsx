@@ -52,7 +52,8 @@ const Settings = () => {
       teacherName: '',
       chairman: '',
       chairmanPhoto: null,
-      logo: null
+      logo: null,
+      homerooms: {} // { 'Kelas X-A': 'Nama Guru' }
     }
   });
   const [inputValue, setInputValue] = useState('');
@@ -203,6 +204,16 @@ const Settings = () => {
       const compressed = await compressImage(file, 800); // Larger for slides
       updateSlide(id, 'url', compressed);
     }
+  };
+
+  const handleHomeroomChange = (className, teacherName) => {
+    const updatedOrg = { 
+      ...data.org, 
+      homerooms: { ...(data.org.homerooms || {}), [className]: teacherName } 
+    };
+    setData({ ...data, org: updatedOrg });
+    saveData('org', updatedOrg);
+    triggerSaveToast();
   };
 
   return (
@@ -459,6 +470,26 @@ const Settings = () => {
                         <option value="Genap">Semester Genap</option>
                       </select>
                     </div>
+                  </div>
+
+                  <div className="doc-divider-settings">Pengaturan Wali Kelas</div>
+                  <div className="homeroom-grid mt-4">
+                    {data.classes.map(c => (
+                      <div key={c} className="homeroom-item glass-card p-3 mb-2 flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                          <div className="class-badge-small">{c}</div>
+                          <span className="font-semibold text-slate-700">Wali Kelas:</span>
+                        </div>
+                        <select 
+                          className="premium-select-mini"
+                          value={data.org.homerooms?.[c] || ''}
+                          onChange={(e) => handleHomeroomChange(c, e.target.value)}
+                        >
+                          <option value="">Pilih Guru...</option>
+                          {data.teachers.map(t => <option key={t} value={t}>{t}</option>)}
+                        </select>
+                      </div>
+                    ))}
                   </div>
 
                   <div className="doc-divider-settings">Identitas & Kontak</div>

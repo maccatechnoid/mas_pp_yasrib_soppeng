@@ -3,14 +3,11 @@ import {
   Search, 
   Printer, 
   Download, 
-  User, 
-  Book, 
-  BarChart, 
-  Award, 
-  FileText,
-  Calendar,
+  GraduationCap,
+  AlertCircle,
   ChevronLeft,
-  GraduationCap
+  School,
+  FileText
 } from 'lucide-react';
 import { getAllData, supabase } from '../utils/storage';
 import './StudentReport.css';
@@ -38,17 +35,12 @@ const StudentReport = () => {
     setStudent(null);
     
     try {
-      // 1. Get student data
       const data = getAllData();
       const foundStudent = data.students.find(s => s.nisn === searchNisn.trim());
       
-      if (!foundStudent) {
-        throw new Error('Siswa dengan NISN tersebut tidak ditemukan.');
-      }
-
+      if (!foundStudent) throw new Error('Siswa dengan NISN tersebut tidak ditemukan.');
       setStudent(foundStudent);
 
-      // 2. Fetch grades from Supabase
       const { data: gradeData, error: gradeErr } = await supabase
         .from('student_grades')
         .select('*')
@@ -59,7 +51,6 @@ const StudentReport = () => {
       if (gradeErr) throw gradeErr;
       setGrades(gradeData || []);
 
-      // 3. Fetch summary
       const { data: summaryData } = await supabase
         .from('student_summaries')
         .select('*')
@@ -77,30 +68,21 @@ const StudentReport = () => {
     }
   };
 
-  const handlePrint = () => {
-    window.print();
-  };
+  const handlePrint = () => window.print();
 
-  const calculateTotalAvg = () => {
-    if (grades.length === 0) return 0;
-    const sum = grades.reduce((acc, curr) => {
-      return acc + (curr.score_tugas + curr.score_uts + curr.score_uas) / 3;
-    }, 0);
-    return (sum / grades.length).toFixed(1);
-  };
+  // Sort grades into Kemenag groups (A: Common, B: Local/Vocational)
+  const groupA = grades.filter(g => !['Seni Budaya', 'PJOK', 'Informatika', 'Bahasa Jawa', 'Muatan Lokal'].includes(g.subject_name));
+  const groupB = grades.filter(g => ['Seni Budaya', 'PJOK', 'Informatika', 'Bahasa Jawa', 'Muatan Lokal'].includes(g.subject_name));
 
   return (
     <div className="report-portal-container">
-      {/* Public View / Search View */}
       {!student ? (
         <div className="search-view fade-in">
           <div className="search-box-card glass-card">
-            <div className="search-header">
-              <div className="portal-icon">
-                <GraduationCap size={40} />
-              </div>
-              <h2>Portal Rapor Digital</h2>
-              <p>Masukkan NISN siswa untuk melihat hasil belajar semester ini.</p>
+            <div className="kemenag-brand">
+              <img src="https://upload.wikimedia.org/wikipedia/commons/b/b2/Logo_Kementerian_Agama.png" alt="Kemenag" className="kemenag-logo" />
+              <h3>Kementerian Agama RI</h3>
+              <p>Portal Rapor Digital Madrasah (RDM)</p>
             </div>
             
             <form onSubmit={handleSearch} className="search-form">
@@ -108,21 +90,17 @@ const StudentReport = () => {
                 <Search className="search-icon" size={20} />
                 <input 
                   type="text" 
-                  placeholder="Contoh: 0012345678"
+                  placeholder="Masukkan NISN Siswa..."
                   value={searchNisn}
                   onChange={(e) => setSearchNisn(e.target.value)}
                 />
               </div>
               <button type="submit" className="btn btn-primary btn-search" disabled={loading}>
-                {loading ? 'Mencari...' : 'Lihat Rapor'}
+                {loading ? 'Mencari Data...' : 'Lihat Hasil Belajar'}
               </button>
             </form>
             
             {error && <div className="search-error"><AlertCircle size={16} /> {error}</div>}
-            
-            <div className="search-footer">
-              <p>Punya kendala? Hubungi Admin Tata Usaha Madrasah.</p>
-            </div>
           </div>
         </div>
       ) : (
@@ -131,107 +109,133 @@ const StudentReport = () => {
             <button className="btn btn-outline" onClick={() => setStudent(null)}>
               <ChevronLeft size={18} /> Kembali
             </button>
-            <div className="action-group">
-              <button className="btn btn-primary" onClick={handlePrint}>
-                <Printer size={18} /> Cetak Rapor
-              </button>
-            </div>
+            <button className="btn btn-primary" onClick={handlePrint}>
+              <Printer size={18} /> Cetak Rapor (RDM Style)
+            </button>
           </div>
 
-          <div className="report-document printable-area">
-            {/* Report Header */}
-            <div className="doc-header">
-              <div className="doc-logo">
-                {org.logo ? <img src={org.logo} alt="Logo" /> : <div className="logo-placeholder">M</div>}
+          <div className="report-document printable-area kemenag-style">
+            {/* Kop Madrasah */}
+            <div className="kemenag-kop">
+              <div className="kop-logo-kemenag">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/b/b2/Logo_Kementerian_Agama.png" alt="Kemenag" />
               </div>
-              <div className="doc-org-info">
-                <h1>{org.name || 'MADRASAH ALIYAH'}</h1>
-                <p>{org.address || 'Alamat Madrasah Belum Diatur'}</p>
-                <p>Telp: {org.phone || '-'} | Email: {org.email || '-'}</p>
+              <div className="kop-text">
+                <h3>KEMENTERIAN AGAMA REPUBLIK INDONESIA</h3>
+                <h4>KANTOR KEMENTERIAN AGAMA KABUPATEN/KOTA</h4>
+                <h2 className="madrasah-name">{org.name || 'MADRASAH ALIYAH NEGERI'}</h2>
+                <p className="madrasah-address">{org.address || 'Alamat Lengkap Madrasah'}</p>
               </div>
-            </div>
-
-            <div className="doc-title">
-              <h2>LAPORAN HASIL BELAJAR PESERTA DIDIK</h2>
-              <p>(RAPOR DIGITAL)</p>
-            </div>
-
-            <div className="student-info-grid">
-              <div className="info-col">
-                <div className="info-row"><span>Nama Peserta Didik</span>: <strong>{student.name}</strong></div>
-                <div className="info-row"><span>Nomor Induk / NISN</span>: <strong>{student.nisn}</strong></div>
-                <div className="info-row"><span>Madrasah</span>: <strong>{org.name}</strong></div>
-              </div>
-              <div className="info-col">
-                <div className="info-row"><span>Kelas</span>: <strong>{student.class}</strong></div>
-                <div className="info-row"><span>Fase / Semester</span>: <strong>{org.semester}</strong></div>
-                <div className="info-row"><span>Tahun Pelajaran</span>: <strong>{org.academicYear}</strong></div>
+              <div className="kop-logo-madrasah">
+                {org.logo && <img src={org.logo} alt="Logo" />}
               </div>
             </div>
 
-            <div className="doc-section-title">A. NILAI AKADEMIK</div>
-            <table className="report-table">
-              <thead>
-                <tr>
-                  <th width="40">No</th>
-                  <th>Mata Pelajaran</th>
-                  <th width="80">Nilai</th>
-                  <th>Capaian Kompetensi / Catatan Guru</th>
-                </tr>
-              </thead>
-              <tbody>
-                {grades.length > 0 ? (
-                  grades.map((g, index) => {
-                    const avg = ((g.score_tugas + g.score_uts + g.score_uas) / 3).toFixed(0);
-                    return (
-                      <tr key={g.id}>
-                        <td align="center">{index + 1}</td>
-                        <td>{g.subject_name}</td>
-                        <td align="center"><strong>{avg}</strong></td>
-                        <td className="comp-cell">{g.notes || 'Menunjukkan penguasaan materi yang baik.'}</td>
-                      </tr>
-                    );
-                  })
-                ) : (
-                  <tr><td colSpan="4" align="center">Belum ada data nilai.</td></tr>
-                )}
-              </tbody>
-              {grades.length > 0 && (
-                <tfoot>
+            <div className="report-title-section">
+              <h2>LAPORAN HASIL BELAJAR (RAPOR)</h2>
+              <p>KURIKULUM MERDEKA</p>
+            </div>
+
+            <div className="student-info-table">
+              <div className="info-row"><span>Nama Siswa</span>: {student.name}</div>
+              <div className="info-row"><span>NISN / NIS</span>: {student.nisn}</div>
+              <div className="info-row"><span>Kelas / Fase</span>: {student.class}</div>
+              <div className="info-row"><span>Semester</span>: {org.semester}</div>
+              <div className="info-row"><span>Tahun Pelajaran</span>: {org.academicYear}</div>
+            </div>
+
+            <div className="rdm-section">
+              <h3>A. Nilai Akademik</h3>
+              <table className="rdm-table">
+                <thead>
                   <tr>
-                    <td colSpan="2" align="right"><strong>RATA-RATA NILAI AKHIR</strong></td>
-                    <td align="center"><strong>{calculateTotalAvg()}</strong></td>
-                    <td></td>
+                    <th width="40">No</th>
+                    <th>Mata Pelajaran</th>
+                    <th width="80">Nilai Akhir</th>
+                    <th>Capaian Kompetensi</th>
                   </tr>
-                </tfoot>
-              )}
-            </table>
+                </thead>
+                <tbody>
+                  <tr><td colSpan="4" className="group-title">Kelompok A (Umum)</td></tr>
+                  {groupA.map((g, i) => (
+                    <tr key={g.id}>
+                      <td align="center">{i + 1}</td>
+                      <td>{g.subject_name}</td>
+                      <td align="center"><strong>{((g.score_tugas + g.score_uts + g.score_uas)/3).toFixed(0)}</strong></td>
+                      <td className="desc-cell">{g.notes || `Menunjukkan penguasaan yang sangat baik dalam memahami materi ${g.subject_name}.`}</td>
+                    </tr>
+                  ))}
+                  <tr><td colSpan="4" className="group-title">Kelompok B (Lokal/Pilihan)</td></tr>
+                  {groupB.map((g, i) => (
+                    <tr key={g.id}>
+                      <td align="center">{i + 1}</td>
+                      <td>{g.subject_name}</td>
+                      <td align="center"><strong>{((g.score_tugas + g.score_uts + g.score_uas)/3).toFixed(0)}</strong></td>
+                      <td className="desc-cell">{g.notes || `Menunjukkan penguasaan yang baik dalam materi ${g.subject_name}.`}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
 
-            <div className="doc-section-title">B. CATATAN PERKEMBANGAN</div>
-            <div className="notes-box">
-              <div className="note-item">
-                <h4>Catatan Wali Kelas:</h4>
-                <p>{summary?.character_notes || 'Pertahankan semangat belajarmu, teruslah berprestasi dan berakhlak mulia.'}</p>
+            <div className="rdm-grid-2">
+              <div className="rdm-section">
+                <h3>B. Ekstrakurikuler</h3>
+                <table className="rdm-table">
+                  <thead>
+                    <tr><th width="40">No</th><th>Kegiatan</th><th>Predikat</th><th>Keterangan</th></tr>
+                  </thead>
+                  <tbody>
+                    {(summary?.extracurricular || []).length > 0 ? (
+                      summary.extracurricular.map((ex, i) => (
+                        <tr key={i}><td align="center">{i+1}</td><td>{ex.split('(')[0]}</td><td align="center">A</td><td>Sangat Baik</td></tr>
+                      ))
+                    ) : (
+                      <tr><td colSpan="4" align="center">-</td></tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+              <div className="rdm-section">
+                <h3>C. Kehadiran</h3>
+                <table className="rdm-table">
+                  <tbody>
+                    <tr><td width="150">Sakit</td><td>: 0 Hari</td></tr>
+                    <tr><td>Izin</td><td>: 0 Hari</td></tr>
+                    <tr><td>Alpa</td><td>: 0 Hari</td></tr>
+                  </tbody>
+                </table>
               </div>
             </div>
 
-            <div className="signatures-area">
+            <div className="rdm-section">
+              <h3>D. Catatan Wali Kelas</h3>
+              <div className="rdm-notes-box">
+                {summary?.character_notes || 'Ananda memiliki motivasi belajar yang tinggi, pertahankan prestasi dan teruslah berakhlak mulia.'}
+              </div>
+            </div>
+
+            <div className="rdm-signatures">
               <div className="sig-item">
                 <p>Orang Tua/Wali,</p>
                 <div className="sig-space"></div>
-                <p>( .................................. )</p>
+                <p>..................................</p>
               </div>
               <div className="sig-item">
-                <p>{org.principal || 'Kepala Madrasah'},</p>
-                <div className="sig-space">
-                   {org.principalPhoto && <img src={org.principalPhoto} className="stempel-mock" alt="TTD" />}
+                <p>{org.address?.split(',')[0] || 'Kota'}, {new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
+                <p>Wali Kelas,</p>
+                <div className="sig-space"></div>
+                <p><strong>{org.homerooms?.[student.class] || '..................................'}</strong></p>
+              </div>
+              <div className="sig-center">
+                <p>Mengetahui,</p>
+                <p>Kepala Madrasah</p>
+                <div className="sig-space-large">
+                   {org.principalPhoto && <img src={org.principalPhoto} className="rdm-stempel" alt="TTD" />}
                 </div>
                 <p><strong>{org.principal || '..................................'}</strong></p>
+                <p>NIP. {org.principalNip || '-'}</p>
               </div>
-            </div>
-            
-            <div className="doc-footer-info">
-              Dicetak pada: {new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}
             </div>
           </div>
         </div>
