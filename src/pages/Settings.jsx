@@ -106,53 +106,70 @@ const Settings = () => {
     setTimeout(() => setShowSaved(false), 2000);
   };
 
-  const handleLogoChange = (e) => {
+  // ─── Helper: Compress Image ──────────────────────────────────────────
+  const compressImage = (file, maxWidth = 400) => {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = (event) => {
+        const img = new Image();
+        img.src = event.target.result;
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          let width = img.width;
+          let height = img.height;
+
+          if (width > maxWidth) {
+            height = (maxWidth / width) * height;
+            width = maxWidth;
+          }
+
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, width, height);
+          resolve(canvas.toDataURL('image/jpeg', 0.7)); // Compress to 70% quality
+        };
+      };
+    });
+  };
+
+  const handleLogoChange = async (e) => {
     const file = e.target.files[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const updated = { ...data.org, logo: reader.result };
-        setData({ ...data, org: updated });
-        saveData('org', updated);
-        window.dispatchEvent(new CustomEvent('user-data-updated', { detail: updated }));
-        triggerSaveToast();
-      };
-      reader.readAsDataURL(file);
+      const compressed = await compressImage(file);
+      const updated = { ...data.org, logo: compressed };
+      setData({ ...data, org: updated });
+      saveData('org', updated);
+      window.dispatchEvent(new CustomEvent('user-data-updated', { detail: updated }));
+      triggerSaveToast();
     }
   };
 
-  const handleLeaderPhotoChange = (type, e) => {
+  const handleLeaderPhotoChange = async (type, e) => {
     const file = e.target.files[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const updated = { ...data.org, [type]: reader.result };
-        setData({ ...data, org: updated });
-        saveData('org', updated);
-        window.dispatchEvent(new Event('user-data-updated'));
-        triggerSaveToast();
-      };
-      reader.readAsDataURL(file);
+      const compressed = await compressImage(file);
+      const updated = { ...data.org, [type]: compressed };
+      setData({ ...data, org: updated });
+      saveData('org', updated);
+      window.dispatchEvent(new Event('user-data-updated'));
+      triggerSaveToast();
     }
   };
 
-  const handleUserPhotoChange = (e) => {
+  const handleUserPhotoChange = async (e) => {
     const file = e.target.files[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const photoData = reader.result;
-        const currentUser = data.user || {};
-        const updated = { ...currentUser, photo: photoData };
-        
-        setData(prev => ({ ...prev, user: updated }));
-        saveData('user', updated);
-        
-        // Dispatch multiple times to be sure
-        window.dispatchEvent(new CustomEvent('user-data-updated', { detail: updated }));
-        triggerSaveToast();
-      };
-      reader.readAsDataURL(file);
+      const compressed = await compressImage(file);
+      const currentUser = data.user || {};
+      const updated = { ...currentUser, photo: compressed };
+      
+      setData(prev => ({ ...prev, user: updated }));
+      saveData('user', updated);
+      
+      window.dispatchEvent(new CustomEvent('user-data-updated', { detail: updated }));
+      triggerSaveToast();
     }
   };
 
@@ -180,14 +197,11 @@ const Settings = () => {
     saveData('slides', updated);
   };
 
-  const handleSlideImage = (id, e) => {
+  const handleSlideImage = async (id, e) => {
     const file = e.target.files[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        updateSlide(id, 'url', reader.result);
-      };
-      reader.readAsDataURL(file);
+      const compressed = await compressImage(file, 800); // Larger for slides
+      updateSlide(id, 'url', compressed);
     }
   };
 
