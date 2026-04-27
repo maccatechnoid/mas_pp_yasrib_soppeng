@@ -10,6 +10,8 @@ import './App.css';
 import Settings from './pages/Settings';
 import Reports from './pages/Reports';
 import Notifications from './pages/Notifications';
+import Grades from './pages/Grades';
+import StudentReport from './pages/StudentReport';
 import Login from './pages/Login';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { Navigate } from 'react-router-dom';
@@ -60,6 +62,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/login" element={<Login />} />
+          <Route path="/rapor" element={<StudentReport />} />
           <Route path="/" element={
             <ProtectedRoute>
               <Layout />
@@ -69,6 +72,7 @@ function App() {
             <Route path="presence" element={<Presence />} />
             <Route path="students" element={<Students />} />
             <Route path="religious" element={<Religious />} />
+            <Route path="grades" element={<Grades />} />
             <Route path="reports" element={<Reports />} />
             <Route path="settings" element={<Settings />} />
             <Route path="notifications" element={<Notifications />} />

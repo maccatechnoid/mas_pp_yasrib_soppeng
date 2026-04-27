@@ -1,4 +1,4 @@
-import { supabase, isSupabaseReady } from './supabase';
+export { supabase, isSupabaseReady } from './supabase';
 
 // ─── localStorage Keys ────────────────────────────────────────────────
 const SUBJECTS_KEY  = 'madrasah_hub_subjects';

@@ -5,6 +5,7 @@ import {
   UserCheck, 
   Users, 
   BookOpen, 
+  ClipboardCheck,
   Settings, 
   LogOut,
   Moon,
@@ -42,6 +43,7 @@ const Sidebar = ({ isOpen, closeMenu }) => {
     { icon: <UserCheck size={20} />, label: 'Presensi', path: '/presence', roles: ['Admin', 'Guru Mata Pelajaran', 'Pembina'] },
     { icon: <Users size={20} />, label: 'Siswa', path: '/students', roles: ['Admin', 'Kepala Madrasah', 'Guru BK', 'Pembina'] },
     { icon: <BookOpen size={20} />, label: 'Kegiatan Ibadah', path: '/religious', roles: ['Admin', 'Guru BK'] },
+    { icon: <ClipboardCheck size={20} />, label: 'Manajemen Nilai', path: '/grades', roles: ['Admin', 'Kepala Madrasah', 'Guru Mata Pelajaran'] },
     { icon: <FileText size={20} />, label: 'Laporan', path: '/reports', roles: ['Admin', 'Kepala Madrasah', 'Guru BK'] },
     { icon: <Settings size={20} />, label: 'Pengaturan', path: '/settings', roles: ['Admin', 'Kepala Madrasah', 'Guru Mata Pelajaran', 'Guru BK', 'Pembina'] },
   ];
