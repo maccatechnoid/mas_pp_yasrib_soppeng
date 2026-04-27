@@ -1,0 +1,164 @@
+.religious-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.religious-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.activity-stat-card {
+  display: flex;
+  gap: 1.25rem;
+  padding: 1.5rem;
+}
+
+.act-icon-box {
+  width: 48px;
+  height: 48px;
+  background-color: #ecfdf5;
+  color: var(--primary);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.act-info {
+  flex: 1;
+}
+
+.act-info h3 {
+  font-size: 1rem;
+  margin-bottom: 0.25rem;
+}
+
+.act-info .time {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.participation {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.participation .bar {
+  flex: 1;
+  height: 8px;
+  background-color: #f1f5f9;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.participation .fill {
+  height: 100%;
+  background-color: var(--primary);
+}
+
+.participation .percent {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.religious-form {
+  padding: 2rem;
+}
+
+.form-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+}
+
+.badge-today {
+  background-color: var(--accent);
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.class-selector {
+  margin-bottom: 2rem;
+}
+
+.class-selector label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.premium-select {
+  width: 100%;
+  max-width: 300px;
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+  outline: none;
+}
+
+.student-checklist {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+  width: 100%;
+  max-width: calc(100vw - 2rem);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.checklist-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  border-radius: 12px;
+  background-color: #f8fafc;
+  min-width: 450px; /* Ensure rows don't squish on mobile */
+}
+
+.check-options {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.check-btn {
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  background: white;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.check-btn.active {
+  background-color: var(--primary);
+  color: white;
+  border-color: var(--primary);
+}
+
+.form-footer {
+  display: flex;
+  justify-content: flex-end;
+}
+
+@media (max-width: 768px) {
+  .religious-form {
+    padding: 1rem;
+    max-width: 100vw;
+    box-sizing: border-box;
+  }
+}
