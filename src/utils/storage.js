@@ -152,48 +152,59 @@ const _syncToSupabase = async (type, data) => {
 
 // ─── Initialize: Pull from Supabase on app boot ───────────────────────
 export const initializeFromSupabase = async () => {
-  if (!isSupabaseReady) return; // Use localStorage defaults
+  if (!isSupabaseReady) return;
+
+  // Create a timeout promise
+  const timeout = new Promise((_, reject) => 
+    setTimeout(() => reject(new Error('Supabase timeout')), 5000)
+  );
 
   try {
-    // 1. org_settings
-    const { data: orgRows } = await supabase.from('org_settings').select('data').eq('id', 1).single();
-    if (orgRows?.data) localStorage.setItem(ORG_KEY, JSON.stringify({ ...defaults.org, ...orgRows.data }));
+    // Wrap the init logic in a Promise.race with the timeout
+    await Promise.race([
+      (async () => {
+        // 1. org_settings
+        const { data: orgRows } = await supabase.from('org_settings').select('data').eq('id', 1).single();
+        if (orgRows?.data) localStorage.setItem(ORG_KEY, JSON.stringify({ ...defaults.org, ...orgRows.data }));
 
-    // 2. students
-    const { data: students } = await supabase.from('students').select('*').order('id');
-    if (students?.length) {
-      const mapped = students.map(s => ({
-        id: s.id, name: s.name, nisn: s.nisn, class: s.class,
-        gender: s.gender, status: s.status, parentPhone: s.parent_phone,
-      }));
-      localStorage.setItem(STUDENTS_KEY, JSON.stringify(mapped));
-    }
+        // 2. students
+        const { data: students } = await supabase.from('students').select('*').order('id');
+        if (students?.length) {
+          const mapped = students.map(s => ({
+            id: s.id, name: s.name, nisn: s.nisn, class: s.class,
+            gender: s.gender, status: s.status, parentPhone: s.parent_phone,
+          }));
+          localStorage.setItem(STUDENTS_KEY, JSON.stringify(mapped));
+        }
 
-    // 3. accounts
-    const { data: accounts } = await supabase.from('accounts').select('*').order('id');
-    if (accounts?.length) {
-      const mapped = accounts.map(a => ({
-        id: a.id, username: a.username, password: a.password,
-        name: a.name, role: a.role, photo: a.photo,
-      }));
-      localStorage.setItem(ACCOUNTS_KEY, JSON.stringify(mapped));
-    }
+        // 3. accounts
+        const { data: accounts } = await supabase.from('accounts').select('*').order('id');
+        if (accounts?.length) {
+          const mapped = accounts.map(a => ({
+            id: a.id, username: a.username, password: a.password,
+            name: a.name, role: a.role, photo: a.photo,
+          }));
+          localStorage.setItem(ACCOUNTS_KEY, JSON.stringify(mapped));
+        }
 
-    // 4. master_data (subjects, classes, teachers, roles, schedule, slides)
-    const { data: masterRows } = await supabase.from('master_data').select('key, value');
-    if (masterRows?.length) {
-      const keyMap = {
-        subjects: SUBJECTS_KEY, classes: CLASSES_KEY, teachers: TEACHERS_KEY,
-        roles: ROLES_KEY, schedule: SCHEDULE_KEY, slides: SLIDES_KEY,
-      };
-      masterRows.forEach(row => {
-        if (keyMap[row.key]) localStorage.setItem(keyMap[row.key], JSON.stringify(row.value));
-      });
-    }
+        // 4. master_data
+        const { data: masterRows } = await supabase.from('master_data').select('key, value');
+        if (masterRows?.length) {
+          const keyMap = {
+            subjects: SUBJECTS_KEY, classes: CLASSES_KEY, teachers: TEACHERS_KEY,
+            roles: ROLES_KEY, schedule: SCHEDULE_KEY, slides: SLIDES_KEY,
+          };
+          masterRows.forEach(row => {
+            if (keyMap[row.key]) localStorage.setItem(keyMap[row.key], JSON.stringify(row.value));
+          });
+        }
+      })(),
+      timeout
+    ]);
 
     console.log('[Supabase] Data synced successfully.');
   } catch (err) {
-    console.warn('[Supabase init error]', err.message, '— Using localStorage fallback.');
+    console.warn('[Supabase init error/timeout]', err.message, '— Using localStorage fallback.');
   }
 };
 

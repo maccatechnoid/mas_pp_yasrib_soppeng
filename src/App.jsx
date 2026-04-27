@@ -27,7 +27,16 @@ function App() {
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    initializeFromSupabase().finally(() => setReady(true));
+    const init = async () => {
+      // Start syncing in background
+      initializeFromSupabase();
+      
+      // Wait only 1 second for branding/splash effect
+      setTimeout(() => {
+        setReady(true);
+      }, 1000);
+    };
+    init();
   }, []);
 
   if (!ready) {
