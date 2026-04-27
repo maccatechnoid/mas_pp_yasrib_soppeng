@@ -24,48 +24,52 @@ const StudentReport = () => {
   useEffect(() => {
     const data = getAllData();
     setOrg(data.org || {});
+
+    // Auto-search if NISN is in URL
+    const params = new URLSearchParams(window.location.search);
+    const nisnParam = params.get('nisn');
+    if (nisnParam) {
+      setSearchNisn(nisnParam);
+      performSearch(nisnParam, data);
+    }
   }, []);
 
-  const handleSearch = async (e) => {
-    e.preventDefault();
-    if (!searchNisn.trim()) return;
-
+  const performSearch = async (nisn, allData) => {
     setLoading(true);
     setError(null);
-    setStudent(null);
-    
     try {
-      const data = getAllData();
-      const foundStudent = data.students.find(s => s.nisn === searchNisn.trim());
-      
-      if (!foundStudent) throw new Error('Siswa dengan NISN tersebut tidak ditemukan.');
+      const foundStudent = allData.students.find(s => s.nisn === nisn.trim());
+      if (!foundStudent) throw new Error('Siswa tidak ditemukan.');
       setStudent(foundStudent);
 
-      const { data: gradeData, error: gradeErr } = await supabase
+      const { data: gradeData } = await supabase
         .from('student_grades')
         .select('*')
         .eq('student_id', foundStudent.id)
-        .eq('academic_year', org.academicYear || '2023/2024')
-        .eq('semester', org.semester || 'Ganjil');
-
-      if (gradeErr) throw gradeErr;
+        .eq('academic_year', allData.org.academicYear)
+        .eq('semester', allData.org.semester);
+      
       setGrades(gradeData || []);
 
       const { data: summaryData } = await supabase
         .from('student_summaries')
         .select('*')
         .eq('student_id', foundStudent.id)
-        .eq('academic_year', org.academicYear || '2023/2024')
-        .eq('semester', org.semester || 'Ganjil')
+        .eq('academic_year', allData.org.academicYear)
+        .eq('semester', allData.org.semester)
         .single();
       
       setSummary(summaryData);
-
     } catch (err) {
       setError(err.message);
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    performSearch(searchNisn, getAllData());
   };
 
   const handlePrint = () => window.print();

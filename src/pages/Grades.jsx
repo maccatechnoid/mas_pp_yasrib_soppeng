@@ -11,7 +11,8 @@ import {
   GraduationCap,
   School,
   UserCheck,
-  Star
+  Star,
+  ExternalLink
 } from 'lucide-react';
 import { getAllData, saveData, supabase } from '../utils/storage';
 import './Grades.css';
@@ -242,18 +243,34 @@ const Grades = () => {
                 <th width="100">UAS</th>
                 <th>Catatan Mapel</th>
                 <th width="100">Rata-rata</th>
+                <th width="120">Aksi</th>
               </tr>
             ) : (
               <tr>
                 <th>Nama Siswa</th>
                 <th width="300">Catatan Karakter / Wali Kelas</th>
                 <th>Ekstrakurikuler</th>
+                <th width="120">Aksi</th>
               </tr>
             )}
           </thead>
           <tbody>
             {filteredStudents.length > 0 ? (
               filteredStudents.map((student) => {
+                const actionCell = (
+                  <td>
+                    <a 
+                      href={`/rapor?nisn=${student.nisn}`} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="btn-preview-link"
+                    >
+                      <ExternalLink size={14} />
+                      <span>Lihat Rapor</span>
+                    </a>
+                  </td>
+                );
+
                 if (mode === 'subject') {
                   const sGrades = grades[student.id] || { tugas: 0, uts: 0, uas: 0, notes: '' };
                   const avg = ((sGrades.tugas + sGrades.uts + sGrades.uas) / 3).toFixed(1);
@@ -283,6 +300,7 @@ const Grades = () => {
                       <td>
                         <div className={`avg-badge ${avg >= 75 ? 'pass' : 'fail'}`}>{avg}</div>
                       </td>
+                      {actionCell}
                     </tr>
                   );
                 } else {
@@ -316,13 +334,14 @@ const Grades = () => {
                           onChange={(e) => handleSummaryChange(student.id, 'extracurricular', e.target.value.split(',').map(s => s.trim()))} 
                         />
                       </td>
+                      {actionCell}
                     </tr>
                   );
                 }
               })
             ) : (
               <tr>
-                <td colSpan="6" className="empty-table">Tidak ada siswa di kelas ini.</td>
+                <td colSpan="7" className="empty-table">Tidak ada siswa di kelas ini.</td>
               </tr>
             )}
           </tbody>

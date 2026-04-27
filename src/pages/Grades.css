@@ -2,6 +2,28 @@
   animation: fadeIn 0.5s ease;
 }
 
+.btn-preview-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 0.5rem 0.8rem;
+  background: #f0fdf4;
+  color: #16a34a;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all 0.2s;
+  border: 1px solid #dcfce7;
+}
+
+.btn-preview-link:hover {
+  background: #16a34a;
+  color: white;
+  transform: translateY(-2px);
+}
+
 .mode-toggle-bar {
   display: flex;
   gap: 10px;
