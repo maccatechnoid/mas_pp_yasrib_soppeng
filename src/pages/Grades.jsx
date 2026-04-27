@@ -8,7 +8,8 @@ import {
   AlertCircle,
   ChevronRight,
   BookOpen,
-  GraduationCap
+  GraduationCap,
+  School
 } from 'lucide-react';
 import { getAllData, saveData, supabase } from '../utils/storage';
 import './Grades.css';
