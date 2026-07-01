@@ -162,11 +162,11 @@ const Sidebar = ({ isOpen, closeMenu }) => {
   return (
     <>
       {isOpen && (
-        <div 
-          className="sidebar-overlay" 
-          onClick={closeMenu}
-        ></div>
-      )}
+        <div  
+        className="sidebar-overlay mobile-visible" // Tambahkan class penanda aktif eksplisit
+        onClick={closeMenu}
+      ></div>
+    )}
       <aside className={`sidebar ${isOpen ? 'open' : ''}`}>
 
         {/* Logo Header */}
