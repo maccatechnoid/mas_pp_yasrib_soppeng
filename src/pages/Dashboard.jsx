@@ -274,6 +274,10 @@ const Dashboard = () => {
               src={displaySlides[currentSlide]?.url}
               alt={displaySlides[currentSlide]?.title}
               className="slide-image"
+              onError={(e) => {
+                e.target.onerror = null;
+                e.target.style.display = 'none';
+              }}
             />
             <div className="slide-indicators">
               {displaySlides.map((_, i) => (

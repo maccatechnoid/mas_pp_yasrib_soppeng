@@ -698,6 +698,24 @@
   overflow: hidden;
   box-shadow: 0 15px 40px rgba(0,0,0,0.1);
   border: 4px solid white;
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (max-width: 1024px) {
+  .slideshow-container {
+    height: 280px;
+  }
+}
+
+@media (max-width: 768px) {
+  .slideshow-container {
+    height: 180px;
+    border-radius: 16px;
+    border-width: 3px;
+  }
 }
 
 .slide-image {
@@ -705,6 +723,10 @@
   height: 100%;
   object-fit: cover;
   animation: fadeIn 1s ease-in-out;
+  color: transparent; /* Hides alt text if image is broken */
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 .slide-indicators {
