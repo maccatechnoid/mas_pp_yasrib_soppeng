@@ -266,8 +266,14 @@ _Bimbingan Konseling Madrasah_`;
 
       <AnimatePresence mode="wait">
         {activeTab === 'dashboard' && (
-          <motion.div className="no-print" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} key="dashboard">
-            <div className="c-dashboard-grid">
+          {activeTab === 'dashboard' && (
+    <motion.div 
+      className="no-print" 
+      initial={{ opacity: 0 }} // Hapus properti y: 10
+      animate={{ opacity: 1 }} 
+      exit={{ opacity: 0 }}    // Hapus properti y: -10
+      key="dashboard"
+      >
               <div className="c-stat-card accent-purple">
                 <div className="c-stat-icon"><Users size={24} /></div>
                 <div className="c-stat-content">
