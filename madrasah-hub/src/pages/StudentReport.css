@@ -1,0 +1,519 @@
+/* RDM Official Print Styles - CLEAN & ORGANIZED */
+:root {
+  --rdm-border: 1px solid #000;
+  --rdm-header-bg: #f2f2f2;
+}
+
+.report-portal-advanced {
+  min-height: 100vh;
+  background: #f1f5f9;
+}
+
+.report-workspace { display: flex; height: 100vh; background: #f8fafc; }
+
+.report-sidebar {
+  width: 320px; 
+  background: #0f172a; 
+  color: white; 
+  display: flex; 
+  flex-direction: column;
+  padding: 2rem 1.5rem; 
+  box-shadow: 10px 0 30px rgba(0,0,0,0.05); 
+  z-index: 10;
+  position: relative;
+  overflow: hidden;
+}
+
+.report-sidebar::before {
+  content: '';
+  position: absolute;
+  top: -100px;
+  right: -100px;
+  width: 250px;
+  height: 250px;
+  background: radial-gradient(circle, rgba(16, 185, 129, 0.1) 0%, transparent 70%);
+  z-index: 0;
+}
+
+.report-preview-area {
+  flex: 1; 
+  overflow-y: auto; 
+  padding: 40px; 
+  display: flex; 
+  justify-content: center; 
+  background: #e2e8f0;
+  scroll-behavior: smooth;
+}
+
+/* Sidebar Elements */
+.sidebar-header {
+  position: relative;
+  z-index: 2;
+  margin-bottom: 0.5rem;
+}
+
+.sidebar-top-actions {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 0.75rem;
+}
+
+.btn-back {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.8);
+  padding: 6px 10px;
+  border-radius: 10px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}@media (hover: hover) {
+  .btn-back:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  transform: translateY(-2px);
+}
+}
+
+.btn-print-action-top {
+  flex: 1;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  border: none;
+  color: white;
+  padding: 6px 10px;
+  border-radius: 10px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.2);
+}@media (hover: hover) {
+  .btn-print-action-top:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.3);
+}
+}
+
+.rdm-student-profile {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 10px 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  margin-bottom: 0;
+}
+
+.rdm-avatar-mini {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 1.1rem;
+  color: white;
+  box-shadow: 0 8px 16px rgba(16, 185, 129, 0.3);
+  flex-shrink: 0;
+}
+
+.rdm-profile-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0px;
+  background: transparent !important;
+  padding: 0 !important;
+}
+
+.b-name {
+  font-size: 1rem;
+  font-weight: 800;
+  color: #ffffff !important;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.b-nisn {
+  font-size: 0.75rem;
+  color: #94a3b8 !important;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  margin: 0;
+}
+
+.sidebar-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  position: relative;
+  z-index: 2;
+}
+
+.menu-item {
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  padding: 8px 12px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  text-align: left;
+}@media (hover: hover) {
+  .menu-item:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: white;
+  transform: translateX(4px);
+}
+}
+
+.menu-item.active {
+  background: rgba(16, 185, 129, 0.1);
+  color: #10b981;
+  border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+/* THE PAPER (A4 Standard) */
+.report-page {
+  width: 210mm;
+  min-height: 297mm;
+  background: white;
+  padding: 10mm 12mm;
+  margin: 0 auto 10px auto;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  position: relative;
+  font-family: "Times New Roman", Times, serif;
+  color: #000;
+  line-height: 1.15;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+/* Watermark */
+.report-page::before {
+  content: ''; position: absolute; top: 55%; left: 50%; transform: translate(-50%, -50%);
+  width: 450px; height: 450px; background: url('https://upload.wikimedia.org/wikipedia/commons/b/b2/Logo_Kementerian_Agama.png') no-repeat center;
+  background-size: contain; opacity: 0.03; z-index: 0; pointer-events: none;
+}
+
+/* Sampul Page Styles */
+.sampul-page {
+  padding: 10mm;
+}
+
+.sampul-border-frame {
+  height: 100%;
+  border: 4px double #000;
+  padding: 30mm 15mm;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  text-align: center;
+}
+
+.sampul-kemenag-logo-wrap { width: 100px; margin-bottom: 1.5rem; }
+.sampul-kemenag-logo { width: 100%; }
+.sampul-title { font-size: 24pt; font-weight: 800; margin: 0; line-height: 1.1; }
+.sampul-subtitle { font-size: 20pt; margin: 0; }
+.sampul-logo-madrasah { margin: 2rem 0; }
+.sampul-logo-madrasah img { width: 140px; height: 140px; object-fit: contain; }
+
+.sampul-student-box { margin: 3rem 0; width: 90%; }
+.label-above { font-size: 11pt; font-weight: 600; margin-bottom: 0.5rem; }
+.name-box { border: 1.5px solid #000; padding: 12px; font-size: 16pt; font-weight: 800; margin-bottom: 2rem; min-height: 50px; }
+
+.sampul-bottom-official h3 { font-size: 14pt; margin: 0; font-weight: 700; }
+.sampul-bottom-official h2 { font-size: 18pt; margin: 5px 0; font-weight: 800; text-transform: uppercase; }
+.official-address { font-size: 10pt; font-style: italic; opacity: 0.8; }
+
+/* Official Header KOP */
+.official-kop-header {
+  display: flex;
+  align-items: center;
+  border-bottom: 2.5px double #000;
+  padding-bottom: 5px;
+  margin-bottom: 8px;
+  gap: 12px;
+}
+
+.kop-left, .kop-right { width: 70px; flex-shrink: 0; }
+.kop-left img, .kop-right img { width: 100%; height: auto; }
+.kop-center { flex: 1; text-align: center; }
+.kop-center h3 { font-size: 11pt; margin: 0; font-weight: 700; }
+.kop-center h2 { font-size: 14pt; margin: 2px 0; font-weight: 800; text-transform: uppercase; }
+.kop-center p { font-size: 9pt; margin: 0; font-style: italic; line-height: 1.2; }
+
+/* Info Grid Official */
+.student-info-grid-official {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  margin-bottom: 8px;
+  font-size: 9.5pt;
+}
+
+.info-col table { width: 100%; border-collapse: collapse; }
+.info-col td { border: none !important; padding: 1px 4px !important; vertical-align: top; }
+
+/* Identitas Table Official */
+.identitas-table-official { width: 100%; border-collapse: collapse; margin-top: 2rem; }
+.identitas-table-official td { padding: 6px 4px; vertical-align: top; font-size: 11pt; }
+.identitas-table-official td strong { font-weight: 800; }
+
+.report-title-box { text-align: center; margin: 15px 0; }
+.official-title { font-size: 13pt; font-weight: 800; text-decoration: underline; margin: 0; }
+
+.mt-40 { margin-top: 40mm; }
+
+/* Titles & Sections */
+.report-title { text-align: center; margin: 10px 0; position: relative; z-index: 1; }
+.report-title h3 { font-size: 11pt; font-weight: 800; text-decoration: underline; margin: 0; }
+.section-title-official { font-size: 10pt; font-weight: 800; margin-bottom: 5px; }
+
+/* Tables RDM Standard */
+.rekap-table {
+  width: 100%; border-collapse: collapse; margin-bottom: 6px; font-size: 9pt; position: relative; z-index: 1;
+}
+.rekap-table th, .rekap-table td { border: 1px solid #000; padding: 2px 5px; }
+.rekap-table th { background: var(--rdm-header-bg) !important; font-weight: 800; text-align: center; }
+.cat-header td { background: #f9f9f9 !important; font-weight: 800; padding: 3px 6px !important; }
+
+.subject-sub-name { padding-left: 20px !important; }
+.subject-name { font-weight: 600; }
+
+/* RDM Signature Layout */
+.rdm-sig-container {
+  margin-top: 8px; position: relative; z-index: 1; width: 100%;
+}
+.sig-row-top, .sig-row-bottom {
+  display: flex; justify-content: space-around; margin-bottom: 10px;
+}
+.sig-name { font-weight: 800; text-decoration: underline; margin-bottom: 0; }
+
+.rdm-stamp-img {
+  position: absolute;
+  max-height: 90px;
+  width: auto;
+  left: 20px;
+  top: 0;
+  opacity: 0.8;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.qr-rdm-fixed {
+  position: absolute;
+  bottom: 20px;
+  left: 45%;
+  transform: translateX(-50%);
+}
+
+.page-break-after {
+  page-break-after: always;
+}
+
+/* PRINT OPTIMIZATION */
+@page {
+  size: A4;
+  margin: 0;
+}
+
+@media print {
+  html, body {
+    height: 297mm;
+    width: 210mm;
+    margin: 0;
+    padding: 0;
+  }
+  .no-print { display: none !important; }
+  .pure-preview { padding: 0 !important; }
+  .report-portal-advanced { background: white !important; }
+  .report-preview-area { 
+    padding: 0 !important; 
+    background: white !important; 
+    display: block !important; 
+    overflow: visible !important; 
+    height: auto !important;
+  }
+  .report-page {
+    box-shadow: none !important; 
+    margin: 0 !important; 
+    border: none !important;
+    width: 210mm;
+    height: 297mm;
+    page-break-after: always;
+    overflow: hidden;
+  }
+  .report-page::before {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .bulk-report-wrapper {
+    page-break-after: always;
+  }
+  .page-break-after {
+    page-break-after: always;
+    clear: both;
+  }
+  .rekap-table { page-break-inside: auto; }
+  .rekap-table tr { page-break-inside: avoid; page-break-after: auto; }
+  .rdm-sig-container { page-break-inside: avoid; }
+}
+
+/* UI Helpers */
+.btn-print-action {
+  margin-top: auto;
+  background: #10b981;
+  color: white;
+  border: none;
+  padding: 1.25rem;
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3);
+  position: relative;
+  z-index: 2;
+}@media (hover: hover) {
+  .btn-print-action:hover {
+  background: #059669;
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 15px 35px rgba(16, 185, 129, 0.4);
+}
+}
+
+.btn-print-action:active {
+  transform: scale(0.98);
+}
+
+.pure-preview .report-preview-area {
+  background: #f8fafc;
+}
+
+.report-loading-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  gap: 1rem;
+  color: #1e293b;
+}
+
+.spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@media screen and (max-width: 850px) {
+  .report-workspace {
+    flex-direction: column;
+    height: auto;
+    min-height: 100vh;
+  }
+  .report-sidebar {
+    width: 100%;
+    height: auto;
+    padding: 15px;
+  }
+  .report-preview-area {
+    padding: 10px;
+    display: flex; 
+    flex-direction: column;
+    align-items: center;
+    overflow-x: hidden;
+    width: 100%;
+  }
+  .preview-container-inner {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-x: hidden;
+  }
+  
+  .report-page {
+    zoom: 0.45; /* Default for ~360px screens */
+    margin: 0 0 15px 0 !important;
+  }
+}
+
+/* Progressive zoom to avoid calc() errors */
+@media screen and (max-width: 350px) {
+  .report-page { zoom: 0.40 !important; }
+}
+@media screen and (min-width: 380px) and (max-width: 450px) {
+  .report-page { zoom: 0.50 !important; }
+}
+@media screen and (min-width: 451px) and (max-width: 550px) {
+  .report-page { zoom: 0.60 !important; }
+}
+@media screen and (min-width: 551px) and (max-width: 650px) {
+  .report-page { zoom: 0.70 !important; }
+}
+@media screen and (min-width: 651px) and (max-width: 850px) {
+  .report-page { zoom: 0.80 !important; }
+}
+
+/* Fallback for browsers without zoom (Older Firefox) */
+@supports not (zoom: 1) {
+  @media screen and (max-width: 850px) {
+    .report-preview-area {
+      overflow-x: auto;
+      padding: 10px;
+      align-items: flex-start;
+    }
+    .preview-container-inner {
+      align-items: flex-start;
+      width: 210mm;
+      transform: scale(0.45);
+      transform-origin: top left;
+    }
+    .report-page {
+      margin: 0 0 15px 0 !important;
+    }
+  }
+  @media screen and (max-width: 350px) {
+    .preview-container-inner { transform: scale(0.40) !important; }
+  }
+  @media screen and (min-width: 380px) and (max-width: 450px) {
+    .preview-container-inner { transform: scale(0.50) !important; }
+  }
+  @media screen and (min-width: 451px) and (max-width: 550px) {
+    .preview-container-inner { transform: scale(0.60) !important; }
+  }
+  @media screen and (min-width: 551px) and (max-width: 650px) {
+    .preview-container-inner { transform: scale(0.70) !important; }
+  }
+  @media screen and (min-width: 651px) and (max-width: 850px) {
+    .preview-container-inner { transform: scale(0.80) !important; }
+  }
+}

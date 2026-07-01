@@ -1,0 +1,118 @@
+/* Report Preview Modal - Ultra Premium */
+.report-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(2, 6, 23, 0.85);
+  backdrop-filter: blur(12px) saturate(180%);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: modalIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes modalIn {
+  from { opacity: 0; backdrop-filter: blur(0px); }
+  to { opacity: 1; backdrop-filter: blur(12px); }
+}
+
+.report-modal-container {
+  width: 100vw;
+  height: 100vh;
+  background: #f8fafc;
+  border-radius: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 50px 100px -20px rgba(0, 0, 0, 0.6);
+  border: none;
+}
+
+.modal-top-bar {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  padding: 1.25rem 2.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.btn-close-modal {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 18px;
+  background: #f1f5f9;
+  color: #475569;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s;
+}@media (hover: hover) {
+  .btn-close-modal:hover {
+  background: #ffe4e6;
+  color: #e11d48;
+  border-color: #fecdd3;
+  transform: translateX(-4px);
+}
+}
+
+.modal-title-info {
+  font-weight: 900;
+  color: #0f172a;
+  font-size: 1.2rem;
+  letter-spacing: -0.01em;
+}
+
+.btn-print-modal {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 24px;
+  background: linear-gradient(135deg, #059669 0%, #047857 100%);
+  color: white;
+  border: none;
+  border-radius: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 10px 20px rgba(5, 150, 105, 0.2);
+}@media (hover: hover) {
+  .btn-print-modal:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 15px 30px rgba(5, 150, 105, 0.3);
+}
+}
+
+.modal-body-preview {
+  flex: 1;
+  padding: 0;
+  background: #64748b; /* A darker background to make the paper pop */
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.report-preview-iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  background: white;
+  box-shadow: 0 0 40px rgba(0,0,0,0.1);
+}
+
+@media (max-width: 768px) {
+  .report-modal-container {
+    width: 100vw;
+    height: 100vh;
+    border-radius: 0;
+  }
+  .modal-top-bar {
+    padding: 1rem;
+  }
+}

@@ -1,0 +1,593 @@
+.religious-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+  padding-bottom: 3rem;
+}
+
+.religious-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.activity-stat-card {
+  display: flex;
+  gap: 1.5rem;
+  padding: 1.75rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}@media (hover: hover) {
+  .activity-stat-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+}
+}
+
+.act-icon-box {
+  width: 56px;
+  height: 56px;
+  background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+  color: var(--primary);
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 20px rgba(16, 185, 129, 0.1);
+  flex-shrink: 0;
+}
+
+.act-info {
+  flex: 1;
+}
+
+.act-info h3 {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #1e293b;
+  margin-bottom: 0.25rem;
+}
+
+.act-info .time {
+  font-size: 0.8rem;
+  color: #64748b;
+  font-weight: 600;
+  display: block;
+  margin-bottom: 1.25rem;
+}
+
+.participation .bar {
+  flex: 1;
+  height: 10px;
+  background-color: #f1f5f9;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.participation .fill {
+  height: 100%;
+  background: linear-gradient(to right, #10b981, #34d399);
+  border-radius: 5px;
+}
+
+.religious-form {
+  padding: 0;
+  overflow: hidden;
+  border-radius: 32px !important;
+  border: 1px solid rgba(0, 0, 0, 0.04) !important;
+}
+
+.form-header {
+  padding: 2.5rem 2rem;
+  background: linear-gradient(to right, rgba(16, 185, 129, 0.03), transparent);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header-with-icon {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.header-with-icon h3 {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #1e293b;
+  margin: 0;
+  letter-spacing: -0.5px;
+}
+
+.badge-today {
+  background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+  color: white;
+  padding: 8px 18px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 800;
+  box-shadow: 0 4px 12px rgba(217, 119, 6, 0.2);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.form-body-content {
+  padding: 2rem;
+}
+
+.class-selector {
+  margin-bottom: 2.5rem;
+}
+
+.religious-class-select {
+  max-width: 400px;
+}
+
+.student-checklist {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.checklist-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem 1.5rem;
+  border-radius: 20px;
+  background-color: white;
+  border: 1px solid #f1f5f9;
+  transition: all 0.2s ease;
+}@media (hover: hover) {
+  .checklist-row:hover {
+  border-color: rgba(16, 185, 129, 0.3);
+  background-color: #f8fafc;
+  transform: translateX(5px);
+}
+}
+
+.checklist-row .student-name {
+  font-weight: 700;
+  color: #1e293b;
+  font-size: 1rem;
+}
+
+.check-btn {
+  padding: 10px 20px;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  background: white;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}@media (hover: hover) {
+  .check-btn:hover:not(.active) {
+  border-color: #10b981;
+  color: #10b981;
+  background: #f0fdf4;
+}
+}
+
+.check-btn.active {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+  border: none;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
+  transform: scale(1.05);
+}
+
+.religious-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  text-align: center;
+}
+
+.empty-visual {
+  width: 100px;
+  height: 100px;
+  background: #f1f5f9;
+  border-radius: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #cbd5e1;
+  margin-bottom: 1.5rem;
+  transition: all 0.3s;
+}
+
+.religious-empty-state h4 {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #1e293b;
+  margin: 0 0 8px 0;
+}
+
+.religious-empty-state p {
+  color: #94a3b8;
+  max-width: 300px;
+  margin: 0 auto;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.religious-controls {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 2.5rem;
+}
+
+.premium-search-box {
+  width: 100%;
+}
+
+.premium-search-box input {
+  width: 100%;
+  padding: 12px 20px;
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #1e293b;
+  outline: none;
+  transition: all 0.2s;
+}
+
+.premium-search-box input:focus {
+  background: white;
+  border-color: #10b981;
+  box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
+}
+
+.check-options-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.premium-check-pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 12px;
+  border: 1px solid #f1f5f9;
+  background: white;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+}
+
+.premium-check-pill svg {
+  color: var(--act-color, #10b981);
+  opacity: 0.7;
+  transition: all 0.2s;
+}@media (hover: hover) {
+  .premium-check-pill:hover {
+  border-color: var(--act-color, #10b981);
+  background: rgba(var(--act-color-rgb, 16, 185, 129), 0.05);
+  transform: translateY(-2px);
+}
+}
+
+.premium-check-pill.active {
+  background: var(--act-color, #10b981);
+  color: white;
+  border: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transform: scale(1.05);
+}
+
+.premium-check-pill.active svg {
+  color: white;
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+.religious-main-content {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 2rem;
+}
+
+.religious-left-column {
+  min-width: 0;
+}
+
+.religious-right-column {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.student-profile-mini {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.avatar-letter {
+  width: 38px;
+  height: 38px;
+  background: #f1f5f9;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  color: #64748b;
+  font-size: 0.9rem;
+}
+
+.name-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.student-subtext {
+  font-size: 0.7rem;
+  color: #94a3b8;
+  font-weight: 600;
+}
+
+.checklist-actions {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.btn-wa-share {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: #ecfdf5;
+  color: #10b981;
+  border: 1px solid #d1fae5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}@media (hover: hover) {
+  .btn-wa-share:hover {
+  background: #10b981;
+  color: white;
+  transform: scale(1.1);
+}
+}
+
+/* Widgets */
+.leaderboard-widget, .tips-widget {
+  padding: 1.5rem;
+  border-radius: 24px !important;
+}
+
+.widget-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 1.5rem;
+}
+
+.widget-header h3 {
+  font-size: 1rem;
+  font-weight: 800;
+  color: #1e293b;
+  margin: 0;
+}
+
+.leaderboard-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.leaderboard-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px;
+  background: #f8fafc;
+  border-radius: 12px;
+  transition: transform 0.2s;
+}@media (hover: hover) {
+  .leaderboard-item:hover {
+  transform: translateX(5px);
+  background: white;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+}
+
+.rank-badge {
+  width: 24px;
+  height: 24px;
+  background: #1e293b;
+  color: white;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 800;
+}
+
+.leaderboard-item:nth-child(1) .rank-badge { background: #f59e0b; }
+.leaderboard-item:nth-child(2) .rank-badge { background: #94a3b8; }
+.leaderboard-item:nth-child(3) .rank-badge { background: #b45309; }
+
+.s-info { flex: 1; display: flex; flex-direction: column; gap: 4px; }
+.s-name { font-size: 0.85rem; font-weight: 700; color: #1e293b; }
+.score-track { display: flex; gap: 4px; }
+.star-active { color: #f59e0b; }
+.star-muted { color: #e2e8f0; }
+
+.discipline-trend {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.trend-text {
+  font-size: 0.85rem;
+  color: #64748b;
+  line-height: 1.4;
+}
+
+.trend-text strong { color: #10b981; }
+
+.mini-chart {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  height: 60px;
+  gap: 4px;
+}
+
+.bar-column {
+  flex: 1;
+  height: 100%;
+  display: flex;
+  align-items: flex-end;
+}
+
+.bar-fill {
+  width: 100%;
+  background: #f1f5f9;
+  border-radius: 3px;
+  transition: height 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.bar-column:nth-last-child(1) .bar-fill { background: #10b981; }
+.bar-column:nth-last-child(2) .bar-fill { background: #34d399; }
+
+.header-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.analytics-widget {
+  padding: 1.5rem;
+  background: linear-gradient(135deg, white 0%, #f0f9ff 100%) !important;
+}
+
+.weekly-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.stat-row-mini {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.stat-row-mini .label {
+  font-size: 0.85rem;
+  color: #64748b;
+  font-weight: 600;
+}
+
+.stat-row-mini .value {
+  font-size: 1.25rem;
+  font-weight: 900;
+  color: #0369a1;
+}
+
+.chart-container-premium {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  height: 120px;
+  gap: 8px;
+  padding: 10px 0;
+}
+
+.chart-column {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  height: 100%;
+}
+
+.bar-wrapper {
+  flex: 1;
+  width: 100%;
+  background: #f1f5f9;
+  border-radius: 6px;
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+}
+
+.bar-fill-premium {
+  width: 100%;
+  border-radius: 6px 6px 0 0;
+  transition: height 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.day-label {
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: #94a3b8;
+  text-transform: uppercase;
+}
+
+.analytics-summary {
+  font-size: 0.8rem;
+  color: #64748b;
+  line-height: 1.5;
+  padding: 12px;
+  background: white;
+  border-radius: 12px;
+  border: 1px solid #e0f2fe;
+}
+
+.analytics-summary strong {
+  color: #10b981;
+}
+
+@media (max-width: 1200px) {
+  .religious-main-content {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .checklist-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  
+  .checklist-actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+  
+  .check-options {
+    width: 100%;
+    justify-content: space-between;
+  }
+  
+  .check-btn {
+    flex: 1;
+    padding: 10px 5px;
+    font-size: 0.7rem;
+    text-align: center;
+  }
+}
