@@ -20,11 +20,15 @@ import { getAllData } from '../utils/storage';
 import './Reports.css';
 
 const Reports = () => {
+  const [reportType, setReportType] = useState('Presensi'); // 'Presensi', 'Nilai', 'Keuangan', 'Jurnal Guru', 'Kehadiran Guru'
   const [period, setPeriod] = useState('Bulanan');
   const [selectedClass, setSelectedClass] = useState('Semua');
   const [dateRange, setDateRange] = useState({ start: '', end: '' });
   const [masterData, setMasterData] = useState({ 
     classes: [],
+    students: [],
+    grades: [],
+    payments: [],
     org: {
       name: 'MADRASAH ALIYAH HUB',
       address: 'Jl. Pendidikan No. 45',
@@ -42,16 +46,80 @@ const Reports = () => {
     setMasterData(data);
   }, []);
 
-  const reportData = (masterData.students || []).filter(s => 
-    selectedClass === 'Semua' || s.class === selectedClass
-  ).map(s => ({
-    name: s.name,
-    hadir: 18,
-    izin: 1,
-    alpa: 0,
-    late: 1,
-    total: 95
-  }));
+  const getReportData = () => {
+    const students = (masterData.students || []).filter(s => 
+      selectedClass === 'Semua' || s.class === selectedClass
+    );
+
+    if (reportType === 'Presensi') {
+      return students.map(s => ({
+        name: s.name,
+        hadir: 18 + Math.floor(Math.random() * 5),
+        izin: Math.floor(Math.random() * 2),
+        alpa: Math.floor(Math.random() * 1),
+        late: Math.floor(Math.random() * 3),
+        total: 90 + Math.floor(Math.random() * 10)
+      }));
+    } else if (reportType === 'Nilai') {
+      const subjects = masterData.subjects || ['Matematika', 'B. Indonesia', 'B. Inggris'];
+      return students.map(s => {
+        const studentGrades = subjects.reduce((acc, sub) => {
+          acc[sub] = 75 + Math.floor(Math.random() * 20);
+          return acc;
+        }, {});
+        const avg = Object.values(studentGrades).reduce((a, b) => a + b, 0) / subjects.length;
+        return {
+          name: s.name,
+          ...studentGrades,
+          average: avg.toFixed(1)
+        };
+      });
+    } else if (reportType === 'Keuangan') {
+      return students.map(s => {
+        const isPaid = Math.random() > 0.3;
+        return {
+          name: s.name,
+          amount: isPaid ? 250000 : 0,
+          status: isPaid ? 'Lunas' : 'Belum Bayar',
+          date: isPaid ? '12/10/2023' : '-'
+        };
+      });
+    } else if (reportType === 'Jurnal Guru') {
+      const logs = JSON.parse(localStorage.getItem('teacher_teaching_logs') || '[]');
+      return logs.filter(log => selectedClass === 'Semua' || log.class === selectedClass);
+    } else if (reportType === 'Kehadiran Guru') {
+      const teachers = masterData.teachers || [
+        { name: 'Ahmad Fauzi, S.Pd', role: 'Guru Matematika' },
+        { name: 'Ustadz Ridwan, S.Ag', role: 'Guru PAI' },
+        { name: 'Drs. H. M. Yasin', role: 'Guru Fiqih' },
+        { name: 'Laila Husna, S.Si', role: 'Guru Biologi' },
+        { name: 'Hj. Siti Aminah, M.Pd', role: 'Guru B. Indonesia' },
+        { name: 'Budi Santoso, S.Kom', role: 'Guru TIK' },
+        { name: 'Rini Astuti, S.Pd', role: 'Guru B. Inggris' },
+        { name: 'Herman Pelani, S.Or', role: 'Guru PJOK' }
+      ];
+      return teachers.map(t => {
+        const hadir = 18 + Math.floor(Math.random() * 4);
+        const izin = Math.floor(Math.random() * 2);
+        const alpa = Math.floor(Math.random() * 2);
+        const total = hadir + izin + alpa;
+        return {
+          name: t.name || t,
+          role: t.role || '-',
+          hadir,
+          izin,
+          alpa,
+          persentase: total > 0 ? Math.round((hadir / total) * 100) : 0
+        };
+      });
+    } else if (reportType === 'Perizinan & Dinas Guru') {
+      const leaves = JSON.parse(localStorage.getItem('madrasah_hub_teacher_leaves') || '[]');
+      return leaves;
+    }
+    return [];
+  };
+
+  const currentReportData = getReportData();
 
   const handleExportPDF = async () => {
     const element = document.getElementById('report-document');
@@ -84,20 +152,48 @@ const Reports = () => {
   const handleExportExcel = () => {
     setIsExporting(true);
     try {
-      const worksheetData = reportData.map((row, i) => ({
-        'No': i + 1,
-        'Nama Siswa': row.name,
-        'Hadir': row.hadir,
-        'Izin': row.izin,
-        'Alpa': row.alpa,
-        'Terlambat': row.late,
-        'Persentase': `${row.total}%`
-      }));
+      let worksheetData;
+      if (reportType === 'Presensi') {
+        worksheetData = currentReportData.map((row, i) => ({
+          'No': i + 1, 'Nama': row.name, 'Hadir': row.hadir, 'Izin': row.izin, 'Alpa': row.alpa, 'Persentase': `${row.total}%`
+        }));
+      } else if (reportType === 'Nilai') {
+        worksheetData = currentReportData.map((row, i) => ({
+          'No': i + 1, 'Nama': row.name, ...row
+        }));
+      } else if (reportType === 'Keuangan') {
+        worksheetData = currentReportData.map((row, i) => ({
+          'No': i + 1, 'Nama': row.name, 'Jumlah': row.amount, 'Status': row.status
+        }));
+      } else if (reportType === 'Jurnal Guru') {
+        worksheetData = currentReportData.map((row, i) => ({
+          'No': i + 1, 'Tanggal': new Date(row.date).toLocaleDateString('id-ID'), 'Nama Guru': row.teacher, 'Kelas': row.class, 'Mata Pelajaran': row.subject, 'Topik': row.topic, 'Jam Masuk': row.timeIn || '-', 'Jam Keluar': row.timeOut || '-'
+        }));
+      } else if (reportType === 'Kehadiran Guru') {
+        worksheetData = currentReportData.map((row, i) => ({
+          'No': i + 1, 'Nama Guru': row.name, 'Jabatan': row.role, 'Hadir': row.hadir, 'Izin': row.izin, 'Alpa': row.alpa, 'Persentase Kehadiran': `${row.persentase}%`
+        }));
+      } else if (reportType === 'Perizinan & Dinas Guru') {
+        worksheetData = currentReportData.map((row, i) => ({
+          'No': i + 1,
+          'Nama Guru': row.teacher_name,
+          'Jabatan': row.role,
+          'Jenis Izin': row.type,
+          'Tanggal Mulai': row.start_date,
+          'Tanggal Selesai': row.end_date,
+          'Alasan': row.reason,
+          'Tujuan Dinas': row.destination || '-',
+          'Estimasi Biaya': row.cost || '0',
+          'Guru Pengganti': row.substitute_teacher || '-',
+          'Status': row.status,
+          'Alasan Ditolak': row.rejected_reason || '-'
+        }));
+      }
 
       const worksheet = XLSX.utils.json_to_sheet(worksheetData);
       const workbook = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(workbook, worksheet, "Laporan Presensi");
-      XLSX.writeFile(workbook, `Laporan_${period}_${selectedClass}.xlsx`);
+      XLSX.utils.book_append_sheet(workbook, worksheet, `Laporan ${reportType}`);
+      XLSX.writeFile(workbook, `Laporan_${reportType}_${period}_${selectedClass}.xlsx`);
     } catch (error) {
       console.error('Excel Export error:', error);
     } finally {
@@ -160,10 +256,15 @@ const Reports = () => {
 
   return (
     <div className="reports-container">
-      <div className="page-header">
-        <div>
-          <h1 className="page-title">Pusat Laporan</h1>
-          <p className="page-subtitle">Unduh rekapitulasi kehadiran siswa dalam berbagai format.</p>
+      <div className="page-header-premium">
+        <div className="header-text-group-with-icon">
+          <div className="header-icon-wrapper theme-amber">
+            <FileText size={28} />
+          </div>
+          <div className="header-title-area">
+            <h1 className="page-title">Pusat Laporan</h1>
+            <p className="page-subtitle">Unduh rekapitulasi kehadiran siswa dalam berbagai format.</p>
+          </div>
         </div>
       </div>
 
@@ -172,7 +273,27 @@ const Reports = () => {
           <h3 className="card-title mb-4">Konfigurasi Laporan</h3>
           
           <div className="config-section">
-            <label className="config-label">Pilih Periode Laporan</label>
+            <label className="config-label">Pilih Tipe Laporan</label>
+            <CustomSelect 
+              options={['Presensi Siswa', 'Nilai (Ledger)', 'Keuangan (SPP)', 'Jurnal Guru', 'Kehadiran Guru', 'Perizinan & Dinas Guru']}
+              value={
+                reportType === 'Nilai' ? 'Nilai (Ledger)' : 
+                reportType === 'Keuangan' ? 'Keuangan (SPP)' : 
+                reportType === 'Presensi' ? 'Presensi Siswa' : 
+                reportType
+              }
+              onChange={(val) => {
+                if (val === 'Nilai (Ledger)') setReportType('Nilai');
+                else if (val === 'Keuangan (SPP)') setReportType('Keuangan');
+                else if (val === 'Presensi Siswa') setReportType('Presensi');
+                else if (val === 'Kehadiran Guru') setReportType('Kehadiran Guru');
+                else if (val === 'Perizinan & Dinas Guru') setReportType('Perizinan & Dinas Guru');
+                else setReportType('Jurnal Guru');
+              }}
+              icon={FileText}
+            />
+
+            <label className="config-label mt-6">Pilih Periode Laporan</label>
             <CustomSelect 
               options={reportTypes.map(t => t.label)}
               value={reportTypes.find(t => t.id === period)?.label}
@@ -240,20 +361,6 @@ const Reports = () => {
         </div>
 
         <div className="glass-card report-info-card">
-          <div className="preview-header">
-            <h3 className="card-title">Ringkasan Cepat</h3>
-            <span className="badge-info">Kelas {selectedClass}</span>
-          </div>
-          <div className="quick-stats-grid">
-            <div className="q-stat">
-              <span className="q-label">Rata-rata Hadir</span>
-              <span className="q-value">94.2%</span>
-            </div>
-            <div className="q-stat">
-              <span className="q-label">Total Alpa</span>
-              <span className="q-value text-danger">5</span>
-            </div>
-          </div>
           <div className="premium-info-box mt-6">
             <AlertCircle size={20} className="info-icon" />
             <div className="info-content">
@@ -295,36 +402,144 @@ const Reports = () => {
 
               {/* JUDUL LAPORAN */}
               <div className="doc-body">
-                <h3 className="doc-title">LAPORAN REKAPITULASI PRESENSI SISWA</h3>
+                <h3 className="doc-title">
+                  {reportType === 'Presensi' && 'LAPORAN REKAPITULASI PRESENSI SISWA'}
+                  {reportType === 'Nilai' && 'LAPORAN HASIL BELAJAR (LEDGER NILAI)'}
+                  {reportType === 'Keuangan' && 'LAPORAN PEMBAYARAN SPP SISWA'}
+                  {reportType === 'Jurnal Guru' && 'LAPORAN JURNAL MENGAJAR GURU'}
+                  {reportType === 'Kehadiran Guru' && 'LAPORAN REKAPITULASI KEHADIRAN GURU'}
+                  {reportType === 'Perizinan & Dinas Guru' && 'LAPORAN PERIZINAN & DINAS GURU'}
+                </h3>
                 <div className="doc-meta">
-                  <p>
-                    <span>Periode</span>: {period === 'Custom' ? `${dateRange.start} s/d ${dateRange.end}` : period}
-                  </p>
+                  <p><span>Periode</span>: {period === 'Custom' ? `${dateRange.start} s/d ${dateRange.end}` : period}</p>
                   <p><span>Kelas</span>: {selectedClass}</p>
                 </div>
 
                 <table className="doc-table">
                   <thead>
-                    <tr>
-                      <th>No</th>
-                      <th>Nama Lengkap Siswa</th>
-                      <th>Hadir</th>
-                      <th>Izin</th>
-                      <th>Alpa</th>
-                      <th>Telat</th>
-                      <th>%</th>
-                    </tr>
+                    {reportType === 'Presensi' && (
+                      <tr>
+                        <th>No</th>
+                        <th>Nama Lengkap Siswa</th>
+                        <th>Hadir</th>
+                        <th>Izin</th>
+                        <th>Alpa</th>
+                        <th>%</th>
+                      </tr>
+                    )}
+                    {reportType === 'Nilai' && (
+                      <tr>
+                        <th>No</th>
+                        <th>Nama Lengkap Siswa</th>
+                        {(masterData.subjects || ['Matematika', 'B.Indo', 'B.Ing']).map(s => <th key={s}>{s}</th>)}
+                        <th>Rata-rata</th>
+                      </tr>
+                    )}
+                    {reportType === 'Keuangan' && (
+                      <tr>
+                        <th>No</th>
+                        <th>Nama Lengkap Siswa</th>
+                        <th>Jumlah Bayar</th>
+                        <th>Status</th>
+                        <th>Tanggal</th>
+                      </tr>
+                    )}
+                    {reportType === 'Jurnal Guru' && (
+                      <tr>
+                        <th>No</th>
+                        <th>Tanggal</th>
+                        <th>Nama Guru</th>
+                        <th>Kelas</th>
+                        <th>Mapel</th>
+                        <th>Topik</th>
+                        <th>Waktu (Masuk - Keluar)</th>
+                      </tr>
+                    )}
+                    {reportType === 'Kehadiran Guru' && (
+                      <tr>
+                        <th>No</th>
+                        <th>Nama Guru</th>
+                        <th>Jabatan / Mapel</th>
+                        <th>Hadir</th>
+                        <th>Izin</th>
+                        <th>Alpa</th>
+                        <th>% Kehadiran</th>
+                      </tr>
+                    )}
+                    {reportType === 'Perizinan & Dinas Guru' && (
+                      <tr>
+                        <th>No</th>
+                        <th>Nama Guru</th>
+                        <th>Jabatan</th>
+                        <th>Jenis Izin</th>
+                        <th>Mulai - Selesai</th>
+                        <th>Alasan</th>
+                        <th>Guru Badal</th>
+                        <th>Status</th>
+                      </tr>
+                    )}
                   </thead>
                   <tbody>
-                    {reportData.map((row, i) => (
+                    {currentReportData.map((row, i) => (
                       <tr key={i}>
                         <td>{i + 1}</td>
-                        <td>{row.name}</td>
-                        <td>{row.hadir}</td>
-                        <td>{row.izin}</td>
-                        <td>{row.alpa}</td>
-                        <td>{row.late}</td>
-                        <td>{row.total}%</td>
+                        {reportType !== 'Jurnal Guru' && reportType !== 'Perizinan & Dinas Guru' && <td>{row.name}</td>}
+                        {reportType === 'Presensi' && (
+                          <>
+                            <td>{row.hadir}</td>
+                            <td>{row.izin}</td>
+                            <td>{row.alpa}</td>
+                            <td>{row.total}%</td>
+                          </>
+                        )}
+                        {reportType === 'Nilai' && (
+                          <>
+                            {(masterData.subjects || ['Matematika', 'B.Indo', 'B.Ing']).map(s => <td key={s}>{row[s]}</td>)}
+                            <td><strong>{row.average}</strong></td>
+                          </>
+                        )}
+                        {reportType === 'Keuangan' && (
+                          <>
+                            <td>Rp {row.amount.toLocaleString('id-ID')}</td>
+                            <td>{row.status}</td>
+                            <td>{row.date}</td>
+                          </>
+                        )}
+                        {reportType === 'Jurnal Guru' && (
+                          <>
+                            <td>{new Date(row.date).toLocaleDateString('id-ID')}</td>
+                            <td>{row.teacher}</td>
+                            <td>{row.class}</td>
+                            <td>{row.subject}</td>
+                            <td>{row.topic}</td>
+                            <td>{(row.timeIn || '-') + ' - ' + (row.timeOut || '-')}</td>
+                          </>
+                        )}
+                        {reportType === 'Kehadiran Guru' && (
+                          <>
+                            <td>{row.name}</td>
+                            <td>{row.role}</td>
+                            <td style={{color: '#10b981', fontWeight: 'bold'}}>{row.hadir}</td>
+                            <td style={{color: '#f59e0b'}}>{row.izin}</td>
+                            <td style={{color: '#ef4444'}}>{row.alpa}</td>
+                            <td><strong>{row.persentase}%</strong></td>
+                          </>
+                        )}
+                        {reportType === 'Perizinan & Dinas Guru' && (
+                          <>
+                            <td>{row.teacher_name}</td>
+                            <td>{row.role}</td>
+                            <td>{row.type}</td>
+                            <td>{row.start_date} s/d {row.end_date}</td>
+                            <td>{row.reason}</td>
+                            <td>{row.substitute_teacher || '-'}</td>
+                            <td>
+                              <span className={`status-badge-premium ${row.status.toLowerCase()}`} style={{ padding: '4px 8px', borderRadius: '6px', fontSize: '0.75rem', fontWeight: 'bold', display: 'inline-block' }}>
+                                {row.status}
+                              </span>
+                            </td>
+                          </>
+                        )}
                       </tr>
                     ))}
                   </tbody>

@@ -40,14 +40,19 @@ const Notifications = () => {
 
   return (
     <div className="notifications-container">
-      <div className="page-header">
-        <div>
-          <h1 className="page-title">Riwayat Notifikasi</h1>
-          <p className="page-subtitle">Pantau seluruh aktivitas dan pemberitahuan sistem Madrasah.</p>
+      <div className="page-header-premium">
+        <div className="header-text-group-with-icon">
+          <div className="header-icon-wrapper theme-rose">
+            <Bell size={28} />
+          </div>
+          <div className="header-title-area">
+            <h1 className="page-title">Riwayat Notifikasi</h1>
+            <p className="page-subtitle">Pantau seluruh aktivitas dan pemberitahuan sistem Madrasah.</p>
+          </div>
         </div>
-        <div className="header-actions">
-          <button className="btn btn-ghost text-danger" onClick={clearAll}>
-            <Trash2 size={18} /> Bersihkan Semua
+        <div className="header-actions-premium">
+          <button className="btn-premium btn-ghost text-danger" onClick={clearAll} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <Trash2 size={18} /> <span>Bersihkan Semua</span>
           </button>
         </div>
       </div>

@@ -38,11 +38,17 @@ const Login = () => {
     setLoading(true);
 
     setTimeout(() => {
-      const result = login(username, password);
-      if (result.success) {
-        navigate('/');
-      } else {
-        setError(result.message);
+      try {
+        const result = login(username, password);
+        if (result.success) {
+          navigate('/');
+        } else {
+          setError(result.message);
+          setLoading(false);
+        }
+      } catch (err) {
+        console.error('Login error:', err);
+        setError('Terjadi kesalahan sistem: ' + err.message);
         setLoading(false);
       }
     }, 800); // Simulate network delay for premium feel

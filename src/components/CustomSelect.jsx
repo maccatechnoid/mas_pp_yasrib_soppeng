@@ -20,7 +20,11 @@ const CustomSelect = ({
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener('touchstart', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('touchstart', handleClickOutside);
+    };
   }, []);
 
   return (
@@ -43,7 +47,8 @@ const CustomSelect = ({
               <div 
                 key={i} 
                 className={`option-item ${value === option ? 'active' : ''}`}
-                onClick={() => {
+                onClick={(e) => {
+                  e.stopPropagation();
                   onChange(option);
                   setIsOpen(false);
                 }}

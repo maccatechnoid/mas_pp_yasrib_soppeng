@@ -43,6 +43,11 @@ export const AuthProvider = ({ children }) => {
     const data = getAllData();
     const accounts = data.accounts || [];
     
+    // Fallback khusus untuk akun orang tua jika belum ada di localStorage
+    if (!accounts.some(acc => acc.username === 'ortu')) {
+      accounts.push({ id: 6, username: 'ortu', password: 'password', name: 'Bapak Abdullah', role: 'Orang Tua', photo: null });
+    }
+
     const account = accounts.find(
       acc => acc.username === username && acc.password === password
     );

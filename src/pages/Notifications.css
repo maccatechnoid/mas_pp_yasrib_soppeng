@@ -54,10 +54,10 @@
   transition: all 0.2s;
   cursor: pointer;
   position: relative;
-}
-
-.notif-row:hover {
+}@media (hover: hover) {
+  .notif-row:hover {
   background-color: #f0fdf4;
+}
 }
 
 .notif-row.unread {
@@ -127,11 +127,11 @@
   padding: 0.5rem;
   border-radius: 8px;
   cursor: pointer;
-}
-
-.notif-more-btn:hover {
+}@media (hover: hover) {
+  .notif-more-btn:hover {
   background-color: #f1f5f9;
   color: #64748b;
+}
 }
 
 .empty-notif {

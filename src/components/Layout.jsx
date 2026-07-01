@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { Outlet } from 'react-router-dom';
+import React, { useEffect, useMemo } from 'react';
+import { Outlet, useLocation } from 'react-router-dom';
 import Sidebar from './Sidebar';
 import Topbar from './Topbar';
 import { getAllData } from '../utils/storage';
@@ -8,6 +8,7 @@ import './Layout.css';
 
 const Layout = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
+  const location = useLocation();
 
   useEffect(() => {
     const updateBranding = () => {
@@ -40,14 +41,19 @@ const Layout = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
+  // Prevent re-rendering heavy page content (like charts on Dashboard) when the sidebar is toggled
+  const pageContent = useMemo(() => (
+    <main className="page-content">
+      <Outlet />
+    </main>
+  ), [location.pathname]);
+
   return (
     <div className="app-layout">
       <Sidebar isOpen={isMobileMenuOpen} closeMenu={() => setIsMobileMenuOpen(false)} />
       <div className="main-wrapper">
         <Topbar toggleMenu={toggleMobileMenu} />
-        <main className="page-content">
-          <Outlet />
-        </main>
+        {pageContent}
       </div>
     </div>
   );

@@ -2,20 +2,44 @@ import React, { useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Layout from './components/Layout';
 import Dashboard from './pages/Dashboard';
-import Presence from './pages/Presence';
-import Students from './pages/Students';
+import Presensi from './pages/Presensi';
+import Siswa from './pages/Siswa';
 import Religious from './pages/Religious';
+
+import Quran from './pages/Quran';
 import './App.css';
 
 import Settings from './pages/Settings';
 import Reports from './pages/Reports';
 import Notifications from './pages/Notifications';
 import Grades from './pages/Grades';
+import PortalAkademik from './pages/PortalAkademik';
 import StudentReport from './pages/StudentReport';
 import Login from './pages/Login';
+
+import Finance from './pages/Finance';
+import DetailSiswa from './pages/DetailSiswa';
+import TeacherStudy from './pages/TeacherStudy';
+import TeacherLeaves from './pages/TeacherLeaves';
+import UjianSumatif from './pages/UjianSumatif';
+import DashboardWali from './pages/DashboardWali';
+import ParentAcademic from './pages/ParentAcademic';
+import ParentFinance from './pages/ParentFinance';
+import DashboardSiswa from './pages/DashboardSiswa';
+import NilaiSiswa from './pages/NilaiSiswa';
+import StudentReligious from './pages/StudentReligious';
+import RiwayatPresensi from './pages/RiwayatPresensi';
+import ManajemenKelas from './pages/ManajemenKelas';
+import ManajemenAkses from './pages/ManajemenAkses';
+import Profile from './pages/Profile';
+import Konseling from './pages/Konseling';
+import PresensiHarian from './pages/PresensiHarian';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { Navigate } from 'react-router-dom';
 import { initializeFromSupabase } from './utils/storage';
+import { Toaster } from 'react-hot-toast';
+import DashboardGuru from './pages/DashboardGuru';
+import DashboardWaliKelas from './pages/DashboardWaliKelas';
 
 const ProtectedRoute = ({ children }) => {
   const { user } = useAuth();
@@ -23,6 +47,17 @@ const ProtectedRoute = ({ children }) => {
     return <Navigate to="/login" replace />;
   }
   return children;
+};
+
+// Role-based dashboard redirect
+const RoleDashboard = () => {
+  const { user } = useAuth();
+  if (!user) return null;
+  if (user.role === 'Guru Mata Pelajaran') return <DashboardGuru />;
+  if (user.role === 'Wali Kelas') return <DashboardWaliKelas />;
+  if (user.role === 'Siswa') return <DashboardSiswa />;
+  if (user.role === 'Orang Tua') return <DashboardWali />;
+  return <Dashboard />;
 };
 
 function App() {
@@ -59,6 +94,28 @@ function App() {
 
   return (
     <AuthProvider>
+      <Toaster 
+        position="top-center" 
+        toastOptions={{
+          style: {
+            background: 'rgba(15, 23, 42, 0.9)',
+            color: '#fff',
+            backdropFilter: 'blur(10px)',
+            border: '1px solid rgba(255, 255, 255, 0.1)',
+            borderRadius: '16px',
+            padding: '12px 24px',
+            fontSize: '14px',
+            fontWeight: '600',
+            boxShadow: '0 20px 40px rgba(0,0,0,0.2)'
+          },
+          success: {
+            iconTheme: { primary: '#10b981', secondary: '#fff' }
+          },
+          error: {
+            iconTheme: { primary: '#ef4444', secondary: '#fff' }
+          }
+        }} 
+      />
       <BrowserRouter>
         <Routes>
           <Route path="/login" element={<Login />} />
@@ -68,14 +125,34 @@ function App() {
               <Layout />
             </ProtectedRoute>
           }>
-            <Route index element={<Dashboard />} />
-            <Route path="presence" element={<Presence />} />
-            <Route path="students" element={<Students />} />
+            <Route index element={<RoleDashboard />} />
+            <Route path="teacher-dashboard" element={<DashboardGuru />} />
+            <Route path="homeroom-dashboard" element={<DashboardWaliKelas />} />
+            <Route path="presensi" element={<Presensi />} />
+            <Route path="students" element={<Siswa />} />
+            <Route path="portal-akademik" element={<PortalAkademik />} />
             <Route path="religious" element={<Religious />} />
+            <Route path="quran" element={<Quran />} />
             <Route path="grades" element={<Grades />} />
+            <Route path="finance" element={<Finance />} />
+            <Route path="student/:id" element={<DetailSiswa />} />
             <Route path="reports" element={<Reports />} />
+            <Route path="teacher-study" element={<TeacherStudy />} />
+            <Route path="teacher-leaves" element={<TeacherLeaves />} />
+            <Route path="ujian-sumatif" element={<UjianSumatif />} />
+            <Route path="manajemen-kelas" element={<ManajemenKelas />} />
+            <Route path="manajemen-akses" element={<ManajemenAkses />} />
+            <Route path="profile" element={<Profile />} />
             <Route path="settings" element={<Settings />} />
             <Route path="notifications" element={<Notifications />} />
+            <Route path="parent-dashboard" element={<DashboardWali />} />
+            <Route path="parent-academic" element={<ParentAcademic />} />
+            <Route path="parent-finance" element={<ParentFinance />} />
+            <Route path="student-dashboard" element={<DashboardSiswa />} />
+            <Route path="nilai-siswa" element={<NilaiSiswa />} />
+            <Route path="riwayat-presensi" element={<RiwayatPresensi />} />
+            <Route path="konseling" element={<Konseling />} />
+            <Route path="teacher-presence" element={<PresensiHarian />} />
           </Route>
         </Routes>
       </BrowserRouter>

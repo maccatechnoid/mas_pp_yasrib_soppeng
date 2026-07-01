@@ -323,6 +323,32 @@
   
   .official-document {
     padding: 1.5rem;
+    zoom: 0.45; /* Default for very small screens */
+  }
+  
+  /* Progressive zoom for Reports preview */
+  @media screen and (max-width: 350px) {
+    .official-document { zoom: 0.40 !important; }
+  }
+  @media screen and (min-width: 380px) and (max-width: 450px) {
+    .official-document { zoom: 0.50 !important; }
+  }
+  @media screen and (min-width: 451px) and (max-width: 550px) {
+    .official-document { zoom: 0.60 !important; }
+  }
+  @media screen and (min-width: 551px) and (max-width: 650px) {
+    .official-document { zoom: 0.70 !important; }
+  }
+  @media screen and (min-width: 651px) and (max-width: 768px) {
+    .official-document { zoom: 0.85 !important; }
+  }
+  
+  @supports not (zoom: 1) {
+    .official-document {
+      transform: scale(0.45);
+      transform-origin: top center;
+      width: 800px; /* Fixed width for transform */
+    }
   }
   
   .doc-header {
@@ -354,12 +380,17 @@
   animation: fadeIn 0.3s ease-out;
 }
 
+.modal-overlay:has(.report-preview-modal) {
+  padding: 0;
+}
+
 .report-preview-modal {
   background: white;
-  width: 95%;
-  max-width: 1000px;
-  height: 90vh;
-  border-radius: 24px;
+  width: 100vw;
+  max-width: 100vw;
+  height: 100vh;
+  max-height: 100vh;
+  border-radius: 0;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -395,12 +426,12 @@
   color: #64748b;
   cursor: pointer;
   transition: all 0.2s;
-}
-
-.btn-close-modal:hover {
+}@media (hover: hover) {
+  .btn-close-modal:hover {
   background-color: #f1f5f9;
   color: #ef4444;
   border-color: #fecaca;
+}
 }
 
 .official-document {
@@ -424,10 +455,10 @@
   background: #cbd5e1;
   border-radius: 10px;
   border: 2px solid #f1f5f9;
-}
-
-.official-document::-webkit-scrollbar-thumb:hover {
+}@media (hover: hover) {
+  .official-document::-webkit-scrollbar-thumb:hover {
   background: var(--primary);
+}
 }
 
 .modal-footer {

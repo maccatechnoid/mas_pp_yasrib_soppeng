@@ -35,7 +35,11 @@ const Topbar = ({ toggleMenu }) => {
   return (
     <header className="topbar">
       <div className="mobile-menu-toggle">
-        <button className="icon-btn hamburger-btn" onClick={toggleMenu}>
+        <button 
+          className="icon-btn hamburger-btn" 
+          onTouchStart={(e) => { e.preventDefault(); e.stopPropagation(); toggleMenu(); }}
+          onClick={(e) => { e.stopPropagation(); toggleMenu(); }}
+        >
           <Menu size={24} />
         </button>
       </div>
@@ -49,7 +53,7 @@ const Topbar = ({ toggleMenu }) => {
         <div className="notification-wrapper">
           <button 
             className={`icon-btn ${showNotifications ? 'active' : ''}`}
-            onClick={() => setShowNotifications(!showNotifications)}
+            onClick={(e) => { e.stopPropagation(); setShowNotifications(!showNotifications); }}
           >
             <Bell size={20} />
             {notifications.some(n => n.unread) && <span className="notification-badge"></span>}
@@ -84,7 +88,13 @@ const Topbar = ({ toggleMenu }) => {
           )}
         </div>
         
-        <div className="user-profile">
+        <div 
+          className="user-profile" 
+          onTouchStart={(e) => { e.preventDefault(); navigate('/profile'); }}
+          onClick={() => navigate('/profile')}
+          style={{ cursor: 'pointer' }}
+          title="Profil Pengguna"
+        >
           <div className="user-info">
             <span className="user-name">{userData.name || 'Administrator'}</span>
             <span className="user-role">{userData.role || 'Kepala Madrasah'}</span>
