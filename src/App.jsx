@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { HashRouter, Routes, Route } from 'react-router-dom';
 import Layout from './components/Layout';
 import Dashboard from './pages/Dashboard';
 import Presensi from './pages/Presensi';
@@ -116,7 +116,7 @@ function App() {
           }
         }} 
       />
-      <BrowserRouter>
+      <HashRouter>
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/rapor" element={<StudentReport />} />
@@ -155,7 +155,7 @@ function App() {
             <Route path="teacher-presence" element={<PresensiHarian />} />
           </Route>
         </Routes>
-      </BrowserRouter>
+      </HashRouter>
     </AuthProvider>
   );
 }
