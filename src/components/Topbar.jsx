@@ -37,7 +37,6 @@ const Topbar = ({ toggleMenu }) => {
       <div className="mobile-menu-toggle">
         <button 
           className="icon-btn hamburger-btn" 
-          onTouchStart={(e) => { e.preventDefault(); e.stopPropagation(); toggleMenu(); }}
           onClick={(e) => { e.stopPropagation(); toggleMenu(); }}
         >
           <Menu size={24} />
@@ -90,7 +89,6 @@ const Topbar = ({ toggleMenu }) => {
         
         <div 
           className="user-profile" 
-          onTouchStart={(e) => { e.preventDefault(); navigate('/profile'); }}
           onClick={() => navigate('/profile')}
           style={{ cursor: 'pointer' }}
           title="Profil Pengguna"
