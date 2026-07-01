@@ -1,62 +1,113 @@
-import React, { useEffect, useMemo } from 'react';
-import { Outlet, useLocation } from 'react-router-dom';
-import Sidebar from './Sidebar';
-import Topbar from './Topbar';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Bell, Search, User, Menu, Check, Trash2, Clock } from 'lucide-react';
 import { getAllData } from '../utils/storage';
+import { useAuth } from '../context/AuthContext';
+import './Topbar.css';
 
-import './Layout.css';
+const Topbar = ({ toggleMenu }) => {
+  const navigate = useNavigate();
+  const [showNotifications, setShowNotifications] = useState(false);
+  const [userData, setUserData] = useState({});
+  const [notifications, setNotifications] = useState([
+    { id: 1, type: 'presence', title: 'Presensi Masuk', message: 'Guru Ahmad baru saja melakukan presensi.', time: '2 menit yang lalu', unread: true },
+    { id: 2, type: 'religious', title: 'Monitoring Ibadah', message: 'Rekap ibadah harian Kelas XI-A sudah tersedia.', time: '1 jam yang lalu', unread: true },
+    { id: 3, type: 'system', title: 'Update Sistem', message: 'Fitur laporan otomatis kini sudah aktif.', time: '3 jam yang lalu', unread: false },
+  ]);
 
-const Layout = () => {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
-  const location = useLocation();
+  const { user: authUser } = useAuth();
 
   useEffect(() => {
-    const updateBranding = () => {
-      const data = getAllData();
-      if (data.org) {
-        // Update Document Title
-        if (data.org.appName) {
-          document.title = data.org.appName;
-        }
+    if (authUser) {
+      setUserData(authUser);
+    }
+  }, [authUser]);
 
-        // Update Favicon
-        if (data.org.logo) {
-          let link = document.querySelector("link[rel~='icon']");
-          if (!link) {
-            link = document.createElement('link');
-            link.rel = 'icon';
-            document.getElementsByTagName('head')[0].appendChild(link);
-          }
-          link.href = data.org.logo;
-        }
-      }
-    };
-
-    updateBranding();
-    window.addEventListener('user-data-updated', updateBranding);
-    return () => window.removeEventListener('user-data-updated', updateBranding);
-  }, []);
-
-  const toggleMobileMenu = () => {
-    setIsMobileMenuOpen(!isMobileMenuOpen);
+  const markAllAsRead = () => {
+    setNotifications(notifications.map(n => ({ ...n, unread: false })));
   };
 
-  // Prevent re-rendering heavy page content (like charts on Dashboard) when the sidebar is toggled
-  const pageContent = useMemo(() => (
-    <main className="page-content">
-      <Outlet />
-    </main>
-  ), [location.pathname]);
+  const handleViewAll = () => {
+    setShowNotifications(false);
+    navigate('/notifications');
+  };
 
   return (
-    <div className="app-layout">
-      <Sidebar isOpen={isMobileMenuOpen} closeMenu={() => setIsMobileMenuOpen(false)} />
-      <div className="main-wrapper">
-        <Topbar toggleMenu={toggleMobileMenu} />
-        {pageContent}
+    <header className="topbar">
+      <div className="mobile-menu-toggle">
+        <button
+          className="icon-btn hamburger-btn"
+          onClick={(e) => { e.stopPropagation(); toggleMenu(); }}
+        >
+          <Menu size={24} />
+        </button>
       </div>
-    </div>
+
+      <div className="search-container">
+        <Search size={18} className="search-icon" />
+        <input type="text" placeholder="Cari siswa atau data..." className="search-input" />
+      </div>
+
+      <div className="topbar-actions">
+        <div className="notification-wrapper">
+          <button
+            className={`icon-btn ${showNotifications ? 'active' : ''}`}
+            onClick={(e) => { e.stopPropagation(); setShowNotifications(!showNotifications); }}
+          >
+            <Bell size={20} />
+            {notifications.some(n => n.unread) && <span className="notification-badge"></span>}
+          </button>
+
+          {showNotifications && (
+            <div className="notification-dropdown glass-card">
+              <div className="notif-header">
+                <h3>Notifikasi</h3>
+                <button onClick={markAllAsRead}>Tandai dibaca</button>
+              </div>
+              <div className="notif-list">
+                {notifications.map(notif => (
+                  <div key={notif.id} className={`notif-item ${notif.unread ? 'unread' : ''}`}>
+                    <div className="notif-icon">
+                      {notif.type === 'presence' ? <User size={16} /> : <Clock size={16} />}
+                    </div>
+                    <div className="notif-content">
+                      <div className="notif-title-row">
+                        <span className="notif-title">{notif.title}</span>
+                        <span className="notif-time">{notif.time}</span>
+                      </div>
+                      <p className="notif-message">{notif.message}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="notif-footer">
+                <button onClick={handleViewAll}>Lihat Semua Notifikasi</button>
+              </div>
+            </div>
+          )}
+        </div>
+
+        <div
+          className="user-profile"
+          onClick={() => navigate('/profile')}
+          style={{ cursor: 'pointer' }}
+          title="Profil Pengguna"
+        >
+          <div className="user-info">
+            <span className="user-name">{userData.name || 'Administrator'}</span>
+            <span className="user-role">{userData.role || 'Kepala Madrasah'}</span>
+          </div>
+          <div className="user-avatar">
+            {userData.photo ? (
+              <img src={userData.photo} alt="Avatar" className="avatar-img" />
+            ) : (
+              <User size={24} />
+            )}
+          </div>
+        </div>
+      </div>
+    </header>
   );
 };
 
-export default Layout;
+export default Topbar;
