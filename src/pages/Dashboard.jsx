@@ -153,12 +153,19 @@ const Dashboard = () => {
   const currentSessionInfo = getCurrentSession();
 
   // Derived Data
+  const createSvgPlaceholder = (text, bgColor) => {
+    return `data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='400' viewBox='0 0 800 400'%3E%3Crect width='100%25' height='100%25' fill='${bgColor}'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='36' font-weight='bold' fill='%23ffffff'%3E${text}%3C/text%3E%3C/svg%3E`;
+  };
+
+  const defaultSlides = [
+    { id: 1, url: createSvgPlaceholder('Madrasah Hub', '%231e293b'), title: 'Madrasah Hub', desc: 'Sistem Administrasi Terpadu' },
+    { id: 2, url: createSvgPlaceholder('Pendidikan Berkualitas', '%230f172a'), title: 'Pendidikan Berkualitas', desc: 'Mencetak Generasi Rabbani' },
+    { id: 3, url: createSvgPlaceholder('Fasilitas Modern', '%23064e3b'), title: 'Fasilitas Modern', desc: 'Mendukung Pembelajaran Inovatif' }
+  ];
+
   const displaySlides = masterData.slides && masterData.slides.length > 0
     ? masterData.slides
-    : [
-      { id: 1, url: 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=800&auto=format&fit=crop', title: 'Madrasah Hub', desc: 'Sistem Administrasi Terpadu' },
-      { id: 2, url: 'https://images.unsplash.com/photo-1577891728595-06474c5818f7?q=80&w=800&auto=format&fit=crop', title: 'Pendidikan Berkualitas', desc: 'Mencetak Generasi Rabbani' }
-    ];
+    : defaultSlides;
 
   const currentQuote = (masterData.org?.quotes && masterData.org.quotes[currentQuoteIdx]) || { text: 'Ilmu tanpa amal bagaikan pohon tanpa buah.', author: 'Pepatah Arab' };
 
