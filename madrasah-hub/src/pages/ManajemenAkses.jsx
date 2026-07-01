@@ -212,6 +212,7 @@ const ManajemenAkses = () => {
     saveData('accounts', updatedAccounts);
     setData(prev => ({ ...prev, accounts: updatedAccounts }));
     closeModal();
+    window.dispatchEvent(new CustomEvent('user-data-updated'));
   };
 
   const handleDeleteAccount = (account) => {
