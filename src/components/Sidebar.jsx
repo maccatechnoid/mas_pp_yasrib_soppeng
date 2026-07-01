@@ -217,7 +217,18 @@ const Sidebar = ({ isOpen, closeMenu }) => {
                   to={item.path}
                   end={item.path === '/'}
                   className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
-                  onClick={closeMenu}
+                  onClick={(e) => {
+                    if (window.innerWidth <= 1024) {
+                      e.preventDefault();
+                      closeMenu();
+                      // Delay heavy navigation slightly to allow touch ripple and sidebar closing animation to start
+                      setTimeout(() => {
+                        navigate(item.path);
+                      }, 150);
+                    } else {
+                      closeMenu();
+                    }
+                  }}
                 >
                   <span className="nav-link-icon">{item.icon}</span>
                   <span className="nav-link-label">{item.label}</span>
