@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Bell, Search, User, Menu, Check, Trash2, Clock } from 'lucide-react';
-import { getAllData } from '../utils/storage';
+import { Bell, Search, User, Menu, Clock, X } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import './Topbar.css';
 
@@ -34,11 +33,16 @@ const Topbar = ({ toggleMenu }) => {
 
   return (
     <header className="topbar">
+      {/* Tombol Menu Mobile */}
       <div className="mobile-menu-toggle">
         <button 
           className="icon-btn hamburger-btn" 
-          onTouchStart={(e) => { e.preventDefault(); e.stopPropagation(); toggleMenu(); }}
-          onClick={(e) => { e.stopPropagation(); toggleMenu(); }}
+          onClick={(e) => { 
+            e.stopPropagation(); 
+            toggleMenu(); 
+          }}
+          type="button"
+          aria-label="Toggle Menu"
         >
           <Menu size={24} />
         </button>
@@ -88,9 +92,9 @@ const Topbar = ({ toggleMenu }) => {
           )}
         </div>
         
+        {/* Profil Pengguna */}
         <div 
           className="user-profile" 
-          onTouchStart={(e) => { e.preventDefault(); navigate('/profile'); }}
           onClick={() => navigate('/profile')}
           style={{ cursor: 'pointer' }}
           title="Profil Pengguna"
