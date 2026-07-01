@@ -701,7 +701,7 @@
 }
 
 @media (max-width: 768px) {
-  .teacher-dashboard { padding: 1rem; }
+  .guru-dashboard { padding: 1rem; }
   .td-stats-row { grid-template-columns: repeat(2, 1fr); }
   .td-col-side { grid-template-columns: 1fr; }
   .td-header { flex-direction: column; }

@@ -296,13 +296,13 @@
   }
   
   .report-info-card {
-    max-width: 100vw;
+    max-width: 100%;
     overflow: visible !important;
   }
   
   .preview-table-wrapper {
     width: 100%;
-    max-width: calc(100vw - 2rem);
+    max-width: calc(100% - 2rem);
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
   }
@@ -386,8 +386,8 @@
 
 .report-preview-modal {
   background: white;
-  width: 100vw;
-  max-width: 100vw;
+  width: 100%;
+  max-width: 100%;
   height: 100vh;
   max-height: 100vh;
   border-radius: 0;
