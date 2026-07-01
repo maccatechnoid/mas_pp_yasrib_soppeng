@@ -37,12 +37,12 @@ const Topbar = ({ toggleMenu }) => {
       <div className="mobile-menu-toggle">
         <button 
           className="icon-btn hamburger-btn" 
-          onClick={(e) => { 
+          onClick={(e) => {
+            e.preventDefault();
             e.stopPropagation(); 
             toggleMenu(); 
           }}
           type="button"
-          aria-label="Toggle Menu"
         >
           <Menu size={24} />
         </button>
@@ -95,7 +95,10 @@ const Topbar = ({ toggleMenu }) => {
         {/* Profil Pengguna */}
         <div 
           className="user-profile" 
-          onClick={() => navigate('/profile')}
+          onClick={(e) => {
+            e.preventDefault();
+            navigate('/profile');
+          }}
           style={{ cursor: 'pointer' }}
           title="Profil Pengguna"
         >
