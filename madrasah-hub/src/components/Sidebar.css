@@ -302,9 +302,10 @@
   }
 
   /* Trigger keadaan aktif jika pembungkus diaktifkan dari state induk */
-  :has(.sidebar.open) .sidebar-overlay {
-    opacity: 1;
-    pointer-events: auto;
+  .sidebar-overlay.mobile-visible {
+  opacity: 1;
+  pointer-events: auto;
+  display: block;
   }
 
   /* Modifikasi Sidebar Bergeser Keluar Layar secara Default */
