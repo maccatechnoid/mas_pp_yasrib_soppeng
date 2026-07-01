@@ -1,35 +1,31 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import {
-  LayoutDashboard,
+  Home,
+  LayoutGrid,
   Users,
+  UserCheck,
+  ClipboardList,
   BookOpen,
   ClipboardCheck,
-  Settings,
-  LogOut,
-  FileText,
-  Download,
-  X,
-  Wallet,
-  ShieldCheck,
-  CalendarClock,
-  HeartHandshake,
-  UserCheck,
-  LayoutGrid,
-  GraduationCap,
-  BookMarked,
-  Landmark,
-  ScrollText,
-  ClipboardList,
-  Home,
   School,
-  ChevronRight
+  ScrollText,
+  HeartHandshake,
+  Landmark,
+  BookMarked,
+  CalendarClock,
+  Wallet,
+  FileText,
+  ShieldCheck,
+  Settings,
+  Download,
+  LogOut,
+  X
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { getAllData } from '../utils/storage';
 import './Sidebar.css';
 
-// Menu structure with group categories
 const MENU_GROUPS = [
   {
     label: 'MENU UTAMA',
@@ -153,20 +149,27 @@ const Sidebar = ({ isOpen, closeMenu }) => {
     return path === '/settings';
   };
 
-  // Filter groups and items based on permissions
   const visibleGroups = MENU_GROUPS.map(group => ({
     ...group,
     items: group.items.filter(item => isItemVisible(item.path))
   })).filter(group => group.items.length > 0);
 
+  // Fungsi navigasi kustom agar langsung mengeksekusi perpindahan dalam 1x sentuh di HP
+  const handleNavigation = (e, path) => {
+    e.preventDefault();
+    e.stopPropagation();
+    navigate(path);
+    closeMenu(); // Langsung tutup drawer menu mobile tanpa delay
+  };
+
   return (
     <>
       {isOpen && (
-        <div  
-        className="sidebar-overlay mobile-visible" // Tambahkan class penanda aktif eksplisit
-        onClick={closeMenu}
-      ></div>
-    )}
+        <div 
+          className="sidebar-overlay mobile-visible" 
+          onClick={closeMenu}
+        ></div>
+      )}
       <aside className={`sidebar ${isOpen ? 'open' : ''}`}>
 
         {/* Logo Header */}
@@ -192,7 +195,8 @@ const Sidebar = ({ isOpen, closeMenu }) => {
           </div>
           <button 
             className="sidebar-close-btn" 
-            onClick={closeMenu}
+            onClick={(e) => { e.preventDefault(); closeMenu(); }}
+            type="button"
           >
             <X size={20} />
           </button>
@@ -217,7 +221,7 @@ const Sidebar = ({ isOpen, closeMenu }) => {
                   to={item.path}
                   end={item.path === '/'}
                   className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
-                  onClick={closeMenu}
+                  onClick={(e) => handleNavigation(e, item.path)}
                 >
                   <span className="nav-link-icon">{item.icon}</span>
                   <span className="nav-link-label">{item.label}</span>
@@ -229,17 +233,18 @@ const Sidebar = ({ isOpen, closeMenu }) => {
 
         {/* Footer */}
         <div className="sidebar-footer">
-          <div className="nav-group-label">WALI SISWA</div>
           <button
             className="nav-link"
-            onClick={handleBackup}
+            onClick={(e) => { e.preventDefault(); handleBackup(); }}
+            type="button"
           >
             <span className="nav-link-icon"><Download size={18} /></span>
             <span className="nav-link-label">Cadangan Data</span>
           </button>
           <button 
             className="nav-link logout" 
-            onClick={logout}
+            onClick={(e) => { e.preventDefault(); logout(); }}
+            type="button"
           >
             <span className="nav-link-icon"><LogOut size={18} /></span>
             <span className="nav-link-label">Keluar</span>
