@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Bell, Search, User, Menu, Clock, X } from 'lucide-react';
+import { Bell, Search, User, Menu, Clock } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import './Topbar.css';
 
@@ -33,11 +33,10 @@ const Topbar = ({ toggleMenu }) => {
 
   return (
     <header className="topbar">
-      {/* Tombol Menu Mobile */}
       <div className="mobile-menu-toggle">
         <button 
           className="icon-btn hamburger-btn" 
-          onClick={(e) => {
+          onClick={(e) => { 
             e.preventDefault();
             e.stopPropagation(); 
             toggleMenu(); 
@@ -57,7 +56,11 @@ const Topbar = ({ toggleMenu }) => {
         <div className="notification-wrapper">
           <button 
             className={`icon-btn ${showNotifications ? 'active' : ''}`}
-            onClick={(e) => { e.stopPropagation(); setShowNotifications(!showNotifications); }}
+            onClick={(e) => { 
+              e.preventDefault();
+              e.stopPropagation(); 
+              setShowNotifications(!showNotifications); 
+            }}
           >
             <Bell size={20} />
             {notifications.some(n => n.unread) && <span className="notification-badge"></span>}
@@ -92,12 +95,11 @@ const Topbar = ({ toggleMenu }) => {
           )}
         </div>
         
-        {/* Profil Pengguna */}
         <div 
           className="user-profile" 
-          onClick={(e) => {
+          onClick={(e) => { 
             e.preventDefault();
-            navigate('/profile');
+            navigate('/profile'); 
           }}
           style={{ cursor: 'pointer' }}
           title="Profil Pengguna"
