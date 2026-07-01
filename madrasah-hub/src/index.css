@@ -71,12 +71,14 @@ a,
   cursor: pointer;
 }
 
-button:active,
-.btn:active,
-.icon-btn:active,
-.sdx-qa:active {
-  transform: scale(0.95) !important;
-  transition: transform 0.1s ease !important;
+@media (hover: hover) {
+  button:active,
+  .btn:active,
+  .icon-btn:active,
+  .sdx-qa:active {
+    transform: scale(0.95) !important;
+    transition: transform 0.1s ease !important;
+  }
 }
 
 .nav-link:active,
@@ -425,8 +427,10 @@ h3 {
   gap: 10px !important;
 }
 
-.btn-premium:active {
-  transform: scale(0.95) !important;
+@media (hover: hover) {
+  .btn-premium:active {
+    transform: scale(0.95) !important;
+  }
 }
 
 .btn-primary-premium {
