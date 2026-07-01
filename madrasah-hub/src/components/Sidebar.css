@@ -22,10 +22,11 @@
   transform: translateX(0);
 }
 
-/* Menghilangkan efek highlight abu-abu saat elemen ditekan di HP */
+/* Menghilangkan efek highlight abu-abu dan mempercepat respons sentuhan di HP */
 .sidebar button,
 .sidebar .nav-link {
   -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation; /* Menghilangkan delay 300ms double-tap bawaan HP */
 }
 
 /* ==========================================================================
@@ -198,7 +199,7 @@
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  padding: 0.6rem 0.75rem;
+  padding: 0.65rem 0.75rem; /* Tinggi minimal hitbox di HP agar mudah ditekan */
   border-radius: 10px;
   color: rgba(255, 255, 255, 0.7);
   text-decoration: none;
@@ -303,9 +304,9 @@
 
   /* Trigger keadaan aktif jika pembungkus diaktifkan dari state induk */
   .sidebar-overlay.mobile-visible {
-  opacity: 1;
-  pointer-events: auto;
-  display: block;
+    opacity: 1;
+    pointer-events: auto;
+    display: block;
   }
 
   /* Modifikasi Sidebar Bergeser Keluar Layar secara Default */
@@ -313,11 +314,13 @@
     left: 0;
     transform: translateX(-100%);
     visibility: hidden;
+    pointer-events: none; /* Mencegah elemen menangkap sentuhan hantu saat tertutup */
   }
 
   .sidebar.open {
     transform: translateX(0);
     visibility: visible;
+    pointer-events: auto; /* Aktifkan kembali interaksi penuh saat terbuka */
   }
 
   /* Tampilkan tombol silang (X) penutup untuk pengguna mobile */
