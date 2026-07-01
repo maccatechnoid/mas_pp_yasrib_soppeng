@@ -2,14 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { ChevronDown } from 'lucide-react';
 import './CustomSelect.css';
 
-const CustomSelect = ({ 
-  options, 
-  value, 
-  onChange, 
-  placeholder = 'Pilih...', 
-  icon: Icon,
-  className = '' 
-}) => {
+const CustomSelect = ({ options = [], value, onChange, placeholder = 'Pilih...', icon: Icon, className = '' }) => {
   const [isOpen, setIsOpen] = useState(false);
   const selectRef = useRef(null);
 
@@ -19,8 +12,11 @@ const CustomSelect = ({
         setIsOpen(false);
       }
     };
+    
+    // Gunakan mousedown saja di desktop, dan tangani touchstart secara presisi tanpa tumpang tindih
     document.addEventListener('mousedown', handleClickOutside);
-    document.addEventListener('touchstart', handleClickOutside);
+    document.addEventListener('touchstart', handleClickOutside, { passive: true });
+    
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
       document.removeEventListener('touchstart', handleClickOutside);
@@ -31,13 +27,14 @@ const CustomSelect = ({
     <div className={`premium-selector-container ${isOpen ? 'is-open' : ''} ${className}`} ref={selectRef}>
       <div 
         className={`premium-selector ${isOpen ? 'open' : ''}`} 
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={(e) => {
+          e.preventDefault();
+          setIsOpen(!isOpen);
+        }}
       >
         <div className="selector-trigger">
           {Icon && <Icon size={18} className="text-primary" />}
-          <span className="selected-value">
-            {value || placeholder}
-          </span>
+          <span className="selected-value">{value || placeholder}</span>
           <ChevronDown size={16} className={`chevron ${isOpen ? 'rotate' : ''}`} />
         </div>
         
@@ -48,6 +45,7 @@ const CustomSelect = ({
                 key={i} 
                 className={`option-item ${value === option ? 'active' : ''}`}
                 onClick={(e) => {
+                  e.preventDefault();
                   e.stopPropagation();
                   onChange(option);
                   setIsOpen(false);
